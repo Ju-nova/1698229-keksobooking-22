@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг»
 
 * Студент: [Юлия](https://up.htmlacademy.ru/javascript/22/user/1698229).
-* Наставник: `Владимир Артюхов, https://htmlacademy.ru/profile/artman`.
+* Наставник: [Владимир Артюхов](https://up.htmlacademy.ru/javascript/22/user/1095935).
 
 ---
 
