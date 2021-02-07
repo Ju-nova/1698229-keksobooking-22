@@ -1,3 +1,69 @@
+//Создаем массив из аватарок
+let avatarNumber;
+const avatars = [];//сначала пустой массив
+// потом цикл, который нам сгенерирует 8 аватарок
+for (avatarNumber = 0; avatarNumber <= 7; avatarNumber++) {
+
+  avatars.push('img/avatars/user0' + [avatarNumber+1] + '.png');
+}
+
+console.log(
+  avatars,
+)
+
+// массив с временем заселения.отъезда
+const checkHours =[
+  '12:00',
+  '13:00',
+  '14:00',
+];
+// массив с заголовками
+const titles = [
+  'Уютное жилище в Праге',
+  'Уютное жилище в Париже',
+  'Уютное жилище в Токио',
+  'Уютное жилище в Кранодаре',
+  'Уютное жилище в Анапе',
+];
+
+// массив с описанием
+const descriptions = [
+  'С видом на побережье',
+  'Красной площади не видно',
+  'Тараканов вытравили',
+  'Можно с животными',
+  'Нельзя с животными',
+]
+
+// Создаем объект типов жилища
+const Type = {
+  PALACE: 'Дворец',
+  FLAT: 'Квартира',
+  HOUSE: 'Дом',
+  BUNGALOW: 'Бунгало',
+}
+
+// Преобразуем объект типов жилища в массив
+const types = Object.values(Type);
+
+// Создаем объект фич жилища
+const Feature = {
+  WIFI: 'wifi',
+  DISHWASHER: 'dishwasher',
+  PARKING: 'parking',
+  WASHER: 'washer',
+  ELEVATOR: 'elevator',
+}
+
+// Преобразуем объект фич жилища в массив
+const features = Object.values(Feature);
+
+// Создаем объект фоток жилища
+const photos =[
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
+]
 // Функция, возвращающая случайное целое число из переданного диапазона включительно
 // и возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
 const getRandomNumber = (min, max, numberSymbols ) => {
@@ -8,80 +74,13 @@ const getRandomNumber = (min, max, numberSymbols ) => {
 
   return Math.round(preResult);
 };
-// console.log(
-//   getRandomNumber(5.454, 100.450000, 6),
-// )
+
 // получаем случайный элемент из массива
 function arrayRandElement(n) {
   let rand = Math.floor(Math.random() * n.length);
   return n[rand];
 }
-//Создаем массив из аватарок
-let avatars = [];//сначала пустой массив
-// потом цикл, который нам сгенерирует 8 аватарок
-for (let i = 0; i <= 8; i++) {
-  avatars[i] = 'img/avatars/user0' + [i+1] + '.png';
-}
-// console.log(avatars);
-// Создаем автора(это объект)
-const createAuthor = () => {
-  return {
-    avatar: arrayRandElement(avatars),
-  }
-};
-// console.log(
-//   createAuthor(),
-// );
-// массив с заголовками
-const titles = [
-  'Уютное жилище в Праге',
-  'Уютное жилище в Париже',
-  'Уютное жилище в Токио',
-  'Уютное жилище в Кранодаре',
-  'Уютное жилище в Анапе',
-];
-// массив с описанием
-const descriptions = [
-  'С видом на побережье',
-  'Красной площади не видно',
-  'Тараканов вытравили',
-  'Можно с животными',
-  'Нельзя с животными',
-]
-// Создаем объект типов жилища
-const type = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalow: 'Бунгало',
 
-}
-// Преобразуем объект типов жилища в массив
-let types = Object.values(type);
-// console.log(types);
-
-
-// Создаем объект фич жилища
-const feature = {
-  wifi: 'wifi',
-  dishwasher: 'dishwasher',
-  parking: 'parking',
-  washer: 'washer',
-  elevator: 'elevator',
-}
-// Преобразуем объект фич жилища в массив
-let features = Object.values(feature);
-// console.log(features);
-
-// Создаем объект фоток жилища
-let photo = {
-  photo1: 'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  photo2: 'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  photo3: 'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
-}
-// Преобразуем объект фоток жилища в массив
-let photos = Object.values(photo);
-// console.log(photos);
 
 // создаем массив случайной длины с неповторяющимися значениями
 let randomArray = function (array, length) {
@@ -108,31 +107,34 @@ let randomArray = function (array, length) {
 
   return newArray;
 };
-// console.log(randomArray(features, getRandomNumber(0, features.length)))
-// массив с временем заселения.отъезда
-let checkHours =[
-  '12:00',
-  '13:00',
-  '14:00',
-];
-// случайно выбираем значение из массива с временем заселения.отъезда
-let randomCheckHours = arrayRandElement(checkHours);
-//создаем  объект с локацией
-const creatLocation = () => {
 
-  return {
-    x: getRandomNumber(35.65000, 35.70000, 5),
-    y: getRandomNumber(139.70000, 139.80000, 5),
-  };
+
+
+// случайно выбираем значение из массива с временем заселения.отъезда
+const randomCheckHours = arrayRandElement(checkHours);
+
+//  объект с локацией
+let location =  {
+  x: getRandomNumber(35.65000, 35.70000, 5),
+  y: getRandomNumber(139.70000, 139.80000, 5),
+
 };
-// console.log(
-//   creatLocation(),
-// );
+console.log(
+  location,
+)
+// Создаем автора(это объект)
+const createAuthor = () => {
+  return {
+    avatar: arrayRandElement(avatars),
+  }
+};
 // объект с предложением
 const createOffer = () => {
   return {
     title: arrayRandElement(titles),
-    address:creatLocation(),
+
+    address: `${location.x}, ${location.y}`,
+
     price: getRandomNumber(0, 1000000),
     type:arrayRandElement(types),
     rooms:getRandomNumber(0, 1000000),
@@ -146,18 +148,15 @@ const createOffer = () => {
   }
 };
 
-// console.log(
-//   createOffer (),
-// );
-
 // создаем само объявление
 const createAdvert = () => {
   return{
     author: createAuthor(),
     offer: createOffer(),
-    location: creatLocation(),
+    location: location,
   }
 };
-
-createAdvert()
+console.log(
+  createAdvert(),
+)
 
