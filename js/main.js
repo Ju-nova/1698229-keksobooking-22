@@ -1,15 +1,10 @@
+const amountAdvert = 10;
 //Создаем массив из аватарок
-let avatarNumber;
 const avatars = [];//сначала пустой массив
 // потом цикл, который нам сгенерирует 8 аватарок
-for (avatarNumber = 0; avatarNumber <= 7; avatarNumber++) {
-
-  avatars.push('img/avatars/user0' + [avatarNumber+1] + '.png');
+for (let avatarNumber = 1; avatarNumber <= 8; avatarNumber++) {
+  avatars.push(`img/avatars/user0${avatarNumber}.png`);
 }
-
-console.log(
-  avatars,
-)
 
 // массив с временем заселения.отъезда
 const checkHours =[
@@ -43,9 +38,6 @@ const Type = {
   BUNGALOW: 'Бунгало',
 }
 
-// Преобразуем объект типов жилища в массив
-const types = Object.values(Type);
-
 // Создаем объект фич жилища
 const Feature = {
   WIFI: 'wifi',
@@ -54,9 +46,6 @@ const Feature = {
   WASHER: 'washer',
   ELEVATOR: 'elevator',
 }
-
-// Преобразуем объект фич жилища в массив
-const features = Object.values(Feature);
 
 // Создаем объект фоток жилища
 const photos =[
@@ -76,14 +65,13 @@ const getRandomNumber = (min, max, numberSymbols ) => {
 };
 
 // получаем случайный элемент из массива
-function arrayRandElement(n) {
-  let rand = Math.floor(Math.random() * n.length);
-  return n[rand];
+const arrayRandElement = (array) => {
+  let rand = Math.floor(Math.random() * array.length);
+  return array[rand];
 }
 
-
 // создаем массив случайной длины с неповторяющимися значениями
-let randomArray = function (array, length) {
+const randomArray = (array, length) => {
   // создаем новый массив, где перемеiаются значения
   let newArray = [];
 
@@ -108,55 +96,66 @@ let randomArray = function (array, length) {
   return newArray;
 };
 
+const Coordinates = {
+  x: {
+    MIN: 35.65,
+    MAX: 35.7,
+    NUMBER_OF_DIGITS: 5,
+  },
+  y: {
+    MIN: 139.7,
+    MAX: 139.8,
+    NUMBER_OF_DIGITS: 5,
+  },
+}
 
+const createCoordinates = () => {
+  const coordinatesLocation = {};
 
-// случайно выбираем значение из массива с временем заселения.отъезда
-const randomCheckHours = arrayRandElement(checkHours);
-
-//  объект с локацией
-let location =  {
-  x: getRandomNumber(35.65000, 35.70000, 5),
-  y: getRandomNumber(139.70000, 139.80000, 5),
-
+  coordinatesLocation.x = getRandomNumber(Coordinates.x.MIN, Coordinates.x.MAX, Coordinates.x.NUMBER_OF_DIGITS);
+  coordinatesLocation.y = getRandomNumber(Coordinates.y.MIN, Coordinates.y.MAX, Coordinates.y.NUMBER_OF_DIGITS);
+  return coordinatesLocation;
 };
-console.log(
-  location,
-)
-// Создаем автора(это объект)
-const createAuthor = () => {
-  return {
-    avatar: arrayRandElement(avatars),
+
+// Преобразуем объект фич жилища в массив
+const features = Object.values(Feature);
+// Преобразуем объект типов жилища в массив
+const types = Object.values(Type);
+
+// Создаем случайное объявление
+const createAdvert  = () => {
+  const advert = {};
+
+  advert.user = arrayRandElement(avatars);
+
+  advert.location = createCoordinates();
+
+  advert.offer = {};
+  advert.offer.title= arrayRandElement(titles);
+  advert.offer.address = `${advert.location.x}, ${advert.location.y}`;
+  advert.offer.price = getRandomNumber(0, 1000000);
+  advert.offer.type = arrayRandElement(types);
+  advert.offer.rooms = getRandomNumber(0, 1000000);
+  advert.offer.guests = getRandomNumber(0, 1000000);
+  advert.offer.checkin = arrayRandElement(checkHours);
+  advert.offer.checkout = advert.offer.checkin;
+  advert.offer.feature = randomArray(features, getRandomNumber(0, features.length));
+  advert.offer.description = arrayRandElement(descriptions);
+  advert.offer.photos  = randomArray(photos, getRandomNumber(0, photos.length));
+
+  return advert;
+};
+// Создаем массив случайных объявлений
+const createAdvertsArray = (amountAdvert) => {
+  const array = [];
+
+  for (let i = 0; i < amountAdvert; i++) {
+    let advert = createAdvert();
+    array.push(advert);
   }
-};
-// объект с предложением
-const createOffer = () => {
-  return {
-    title: arrayRandElement(titles),
 
-    address: `${location.x}, ${location.y}`,
-
-    price: getRandomNumber(0, 1000000),
-    type:arrayRandElement(types),
-    rooms:getRandomNumber(0, 1000000),
-    guests:getRandomNumber(0, 1000000),
-    checkin: randomCheckHours,
-    checkout: randomCheckHours,
-    feature:randomArray(features, getRandomNumber(0, features.length)),
-    description:arrayRandElement(descriptions),
-    photos:randomArray(photos, getRandomNumber(0, photos.length)),
-
-  }
+  return array;
 };
 
-// создаем само объявление
-const createAdvert = () => {
-  return{
-    author: createAuthor(),
-    offer: createOffer(),
-    location: location,
-  }
-};
-console.log(
-  createAdvert(),
-)
+createAdvertsArray(amountAdvert);
 
