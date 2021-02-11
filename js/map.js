@@ -12,6 +12,7 @@ const Coordinates = {
     NUMBER_OF_DIGITS: 5,
   },
 }
+
 const createCoordinates = () => {
   const coordinatesLocation = {
     x: getRandomNumber(Coordinates.x.MIN, Coordinates.x.MAX, Coordinates.x.NUMBER_OF_DIGITS),
@@ -20,4 +21,5 @@ const createCoordinates = () => {
 
   return coordinatesLocation;
 };
+
 export {createCoordinates};
