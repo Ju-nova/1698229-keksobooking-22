@@ -81,11 +81,11 @@ const createAdvert  = () => {
       address: `${location.x}, ${location.y}`,
       price: getRandomNumber(0, 1000000),
       type: getArrayRandElement(types),
-      rooms: getRandomNumber(0, 1000000),
-      guests: getRandomNumber(0, 1000000),
+      rooms: getRandomNumber(1, 3),
+      guests: getRandomNumber(1, 3),
       checkin: checkTime,
       checkout: checkTime,
-      feature: getRandomArray(features, getRandomNumber(0, features.length)),
+      features: getRandomArray(features, getRandomNumber(0, features.length)),
       description: getArrayRandElement(descriptions),
       photos: getRandomArray(photos, getRandomNumber(0, photos.length)),
     },
@@ -95,6 +95,7 @@ const createAdvert  = () => {
 };
 
 // Создаем массив случайных объявлений
-const adverts = new Array(AMOUNT_ADVERT).fill('').map(() => createAdvert());
+const adverts =  new Array(AMOUNT_ADVERT).fill('').map(() => createAdvert());
 
-export {adverts};
+export {adverts, createAdvert};
+console.log(adverts)
