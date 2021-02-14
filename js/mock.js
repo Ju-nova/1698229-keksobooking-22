@@ -1,6 +1,12 @@
 import {getRandomNumber, getArrayRandElement, getRandomArray } from './util.js';
 import {createCoordinates} from './map.js';
 
+const MIN_GUESTS = 1;
+const MAX_GUESTS = 3;
+const MIN_ROOMS = 1;
+const MAX_ROOMS = 3;
+const MIN_PRICE = 0;
+const MAX_PRICE = 1000000;
 const AMOUNT_ADVERT = 10;
 
 // массив с временем заселения.отъезда
@@ -79,13 +85,13 @@ const createAdvert  = () => {
     offer: {
       title: getArrayRandElement(titles),
       address: `${location.x}, ${location.y}`,
-      price: getRandomNumber(0, 1000000),
+      price: getRandomNumber(MIN_PRICE, MAX_PRICE),
       type: getArrayRandElement(types),
-      rooms: getRandomNumber(0, 1000000),
-      guests: getRandomNumber(0, 1000000),
+      rooms: getRandomNumber(MIN_ROOMS, MAX_ROOMS),
+      guests: getRandomNumber(MIN_GUESTS, MAX_GUESTS),
       checkin: checkTime,
       checkout: checkTime,
-      feature: getRandomArray(features, getRandomNumber(0, features.length)),
+      features: getRandomArray(features, getRandomNumber(0, features.length)),
       description: getArrayRandElement(descriptions),
       photos: getRandomArray(photos, getRandomNumber(0, photos.length)),
     },
@@ -95,6 +101,7 @@ const createAdvert  = () => {
 };
 
 // Создаем массив случайных объявлений
-const adverts = new Array(AMOUNT_ADVERT).fill('').map(() => createAdvert());
+const adverts =  new Array(AMOUNT_ADVERT).fill('').map(() => createAdvert());
 
-export {adverts};
+export {adverts, createAdvert};
+
