@@ -1,4 +1,6 @@
 import {createAdvert} from './mock.js';
+import {declOfNum} from './util.js';
+
 const popupMap = document.querySelector('.map__canvas');//куда вставляем
 
 const similarCardTemplate = document.querySelector('#card')// сам шаблон
@@ -7,13 +9,13 @@ const similarCardTemplate = document.querySelector('#card')// сам шабло�
 
 const similarAdvert = createAdvert(); //импортированная функция для создания объявлений, ее результат - объект
 
-//наполняем карточку-попап
+//наполняем карточку-попап из значений объекта
 const createCard = (card) => {
   const similarCard = similarCardTemplate.cloneNode(true);
   popupMap.appendChild(similarCard);
 
   const cardAvatar = similarCard.querySelector('.popup__avatar');
-  (card.author.avatar) ? cardAvatar.src = card.author.avatar : cardAvatar.remove();
+  (card.author.avatar) ? cardAvatar.src = card.author.avatar : cardAvatar.remove();//тернарный оператор(если элемент undefined, то удаляем его), если нет, то заполняем контентом или другое
 
   const cardTitle = similarCard.querySelector('.popup__title');
   (card.offer.title) ? cardTitle.textContent = card.offer.title : cardTitle.remove();
@@ -28,10 +30,12 @@ const createCard = (card) => {
   (card.offer.type) ? cardType.textContent = card.offer.type : cardType.remove();
 
   const cardRoomsGuests = similarCard.querySelector('.popup__text--capacity');
-  (card.offer.rooms && card.offer.guests) ? cardRoomsGuests.textContent = `${card.offer.rooms} комнаты для ${card.offer.guests} гостей` : cardRoomsGuests.remove();
+  (card.offer.rooms && card.offer.guests) ? cardRoomsGuests.textContent = `${card.offer.rooms} ${declOfNum(card.offer.rooms, ['комната', 'комнаты', 'комнаты'])}
+   для ${card.offer.guests} ${declOfNum(card.offer.guests, ['гостя', 'гостей', 'гостей'])}` : cardRoomsGuests.remove();
 
   const cardTime = similarCard.querySelector('.popup__text--time');
-  (card.offer.checkin && card.offer.checkout) ? cardTime.textContent = `Заезд после  ${card.offer.checkin}, выезд до ${card.offer.checkout}` : cardTime.remove();
+  (card.offer.checkin && card.offer.checkout) ? cardTime.textContent = `Заезд после  ${card.offer.checkin},
+   выезд до ${card.offer.checkout}` : cardTime.remove();
 
   const cardDescription = similarCard.querySelector('.popup__description');
   (card.offer.description) ? cardDescription.textContent = card.offer.description : cardDescription.remove();
@@ -48,9 +52,7 @@ const createCard = (card) => {
     }
   }else featureList.remove();
 
-
   // создаем изображения  в соотсветствии с массивом путей картинок
-
   const photoList = similarCard.querySelector('.popup__photos');
   if(card.offer.photos){
     photoList.innerHTML = '';
@@ -62,6 +64,7 @@ const createCard = (card) => {
   }else photoList.remove();
 
 }
+
 createCard(similarAdvert)
 
 
