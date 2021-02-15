@@ -103,5 +103,5 @@ const createAdvert  = () => {
 // Создаем массив случайных объявлений
 const adverts =  new Array(AMOUNT_ADVERT).fill('').map(() => createAdvert());
 
-export {adverts, createAdvert};
+export {adverts, createAdvert, checkHours};
 
