@@ -1,4 +1,3 @@
-import {createAdvert} from './mock.js';
 import {declOfNum} from './util.js';
 
 const popupMap = document.querySelector('.map__canvas');//куда вставляем
@@ -7,12 +6,9 @@ const similarCardTemplate = document.querySelector('#card')// сам шабло�
   .content
   .querySelector('.popup'); //элемент внутри шаблона, в котором заменяем контент
 
-const similarAdvert = createAdvert(); //импортированная функция для создания объявлений, ее результат - объект
-
 //наполняем карточку-попап из значений объекта
 const createCard = (card) => {
   const similarCard = similarCardTemplate.cloneNode(true);
-  popupMap.appendChild(similarCard);
 
   const cardAvatar = similarCard.querySelector('.popup__avatar');
   (card.author.avatar) ? cardAvatar.src = card.author.avatar : cardAvatar.remove();//тернарный оператор(если элемент undefined, то удаляем его), если нет, то заполняем контентом или другое
@@ -50,7 +46,7 @@ const createCard = (card) => {
       feature.classList.add('popup__feature', featureClass);
       featureList.appendChild(feature);
     }
-  }else featureList.remove();
+  } else featureList.remove();
 
   // создаем изображения  в соотсветствии с массивом путей картинок
   const photoList = similarCard.querySelector('.popup__photos');
@@ -61,11 +57,10 @@ const createCard = (card) => {
       photo.src = card.offer.photos[i];
       photoList.appendChild(photo);
     }
-  }else photoList.remove();
+  } else photoList.remove();
 
-}
+  popupMap.appendChild(similarCard);
+};
 
-createCard(similarAdvert)
-
-
+export {createCard};
 
