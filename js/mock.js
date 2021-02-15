@@ -3,16 +3,16 @@ import {createCoordinates} from './map.js';
 
 const AMOUNT_ADVERT = 10;
 
-const guest = {
+const Guest = {
   MIN : 1,
   MAX : 3,
 }
 
-const room = {
+const Room = {
   MIN : 1,
   MAX : 3,
 }
-const price = {
+const Price = {
   MIN : 0,
   MAX : 1000000,
 }
@@ -92,10 +92,10 @@ const createAdvert = () => {
     offer: {
       title: getArrayRandElement(titles),
       address: `${location.x}, ${location.y}`,
-      price: getRandomNumber(price.MIN, price.MAX),
+      price: getRandomNumber(Price.MIN, Price.MAX),
       type: getArrayRandElement(types),
-      rooms: getRandomNumber(room.MIN, room.MAX),
-      guests: getRandomNumber(guest.MIN, guest.MAX),
+      rooms: getRandomNumber(Room.MIN, Room.MAX),
+      guests: getRandomNumber(Guest.MIN, Guest.MAX),
       checkin: checkTime,
       checkout: checkTime,
       features: getRandomArray(features, getRandomNumber(0, features.length)),
