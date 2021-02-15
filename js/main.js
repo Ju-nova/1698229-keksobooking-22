@@ -1,3 +1,5 @@
+import  './form.js';
 import {adverts} from './mock.js';
 import {createCard} from  './similar-adverts.js';
-import  './form.js';
+
+createCard(adverts[0])

@@ -1,4 +1,3 @@
-import {createAdvert} from './mock.js';
 import {declOfNum} from './util.js';
 
 const popupMap = document.querySelector('.map__canvas');//куда вставляем
@@ -6,9 +5,6 @@ const popupMap = document.querySelector('.map__canvas');//куда вставл�
 const similarCardTemplate = document.querySelector('#card')// сам шаблон
   .content
   .querySelector('.popup'); //элемент внутри шаблона, в котором заменяем контент
-
-const similarAdvert = createAdvert(); //импортированная функция для создания объявлений, ее результат - объект
-
 
 //наполняем карточку-попап из значений объекта
 const createCard = (card) => {
@@ -66,8 +62,6 @@ const createCard = (card) => {
 
   popupMap.appendChild(similarCard);
 };
-
-createCard(similarAdvert)
 
 export {createCard};
 
