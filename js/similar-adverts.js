@@ -8,7 +8,6 @@ const similarCardTemplate = document.querySelector('#card')// сам шабло�
 
 //наполняем карточку-попап из значений объекта
 const createCard = (card) => {
-
   const similarCard = similarCardTemplate.cloneNode(true);
 
   const cardAvatar = similarCard.querySelector('.popup__avatar');

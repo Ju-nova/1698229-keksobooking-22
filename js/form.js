@@ -19,14 +19,14 @@ const types = Object.keys(typePrice);
 const prices = Object.values(typePrice);
 
 // меняем минимальную цену и плэйсхолдер в зависимости от выбранного жилища
-selectType.addEventListener('change', () => {
+const  syncronizeTypePrice = () =>{
   for (let i = 0; i < types.length; i++) {
     if (selectType.value === types[i]) {
       inputPrice.placeholder = prices[i];
       inputPrice.min = prices[i];
     }
   }
-});
+};
 
 //при загрузке страницы минимальная цена и правильный плэйсхолдер, который соответствует выбранному элементу по умолчанию
 const defineSelected = () =>{
@@ -37,20 +37,29 @@ const defineSelected = () =>{
     }
   }
 }
-defineSelected();
 
-//время  заезда-отъезда должно совпасть
-selectTimeIn.addEventListener('change', () => {
+//синхронизируем время заезда-отъезда
+const synchronizeTimeIn = () => {
   for (let i = 0; i < checkHours.length; i++) {
     if (selectTimeIn.value === checkHours[i]) {
       selectTimeOut.value = checkHours[i];
     }
   }
-});
-selectTimeOut.addEventListener('change', () => {
+} ;
+
+const synchronizeTimeOut = () => {
   for (let i = 0; i < checkHours.length; i++) {
     if (selectTimeOut.value === checkHours[i]) {
       selectTimeIn.value = checkHours[i];
     }
   }
-});
+}
+
+// основная функция синхронизации в форме
+const setFormHandler = () => {
+  selectTimeIn.addEventListener('change', synchronizeTimeIn);
+  selectTimeOut.addEventListener('change', synchronizeTimeOut);
+  selectType.addEventListener('change', syncronizeTypePrice);
+}
+
+export {setFormHandler, defineSelected};
