@@ -1,3 +1,3 @@
 import {adverts} from './mock.js';
-import  './similar-adverts.js';
+import {createCard} from  './similar-adverts.js';
 import  './form.js';
