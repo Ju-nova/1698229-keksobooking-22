@@ -1,45 +1,89 @@
-
 /* global L:readonly */
-import '../leaflet/leaflet.js';
+import {disabledForm, unDisabledForm} from './form.js';
+import {adverts} from './data.js';
+import {createCard} from './similar-adverts.js';
 
-import {getRandomNumber} from './util.js';
-// координаты по умолчанию
-const Coordinates = {
-  x: {
-    MIN: 35.65,
-    MAX: 35.7,
-    NUMBER_OF_DIGITS: 5,
-  },
-  y: {
-    MIN: 139.7,
-    MAX: 139.8,
-    NUMBER_OF_DIGITS: 5,
-  },
+const formAddress = document.querySelector('#address');
+//координаты центра карты
+const centerCoordinates = {
+  lat: 35.68955,
+  lng: 139.69222,
 }
 
-const createCoordinates = () => {
-  const coordinatesLocation = {
-    x: getRandomNumber(Coordinates.x.MIN, Coordinates.x.MAX, Coordinates.x.NUMBER_OF_DIGITS),
-    y: getRandomNumber(Coordinates.y.MIN, Coordinates.y.MAX, Coordinates.y.NUMBER_OF_DIGITS),
-  };
+//функция для создания карты
+const createMap = () =>{
 
-  return coordinatesLocation;
-};
-const map = document.querySelector('#map__canvas');
+  //форма недоступна, пока не загрузится карта
+  disabledForm();
 
-L.map(' map')
-  .setView({
-    lat: 59.92749,
-    lng: 30.31127,
+  //загружаем карту, и делаем форму доступной
+  const map = L.map('map-canvas').on('load', () => {
+    unDisabledForm();
+  }).setView({
+    lat: centerCoordinates.lat,
+    lng: centerCoordinates.lng,
   }, 10);
 
-L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-  {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  },
-).addTo(map);
+  L.tileLayer(
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+  ).addTo(map);
 
+  //устанавливаем маркер и иконку в центр карты
+  const mainPinIcon = L.icon({
+    iconUrl: '../leaflet/images/marker-icon-2x.png',
+    iconSize: [50, 82],
+    iconAnchor: [25, 82],
+  });
 
+  const mainPinMarker = L.marker(
+    {
+      lat: centerCoordinates.lat,
+      lng: centerCoordinates.lng,
+    },
+    {
+      draggable: true,
+      icon: mainPinIcon,
+    },
+  );
+  mainPinMarker.addTo(map);
 
-export {createCoordinates};
+  //добавляем координаты маркера в форму
+  formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
+
+  //добавляем координаты передвинутого маркера в форму
+  mainPinMarker.on('moveend', (evt) => {
+    const newAddressForm = evt.target.getLatLng();
+    formAddress.value = `${(newAddressForm.lat).toFixed(5)}, ${(newAddressForm.lng).toFixed(5)}`;
+  });
+
+  //добавляем маркеры и заполняем балун со случайными объявлениями
+  adverts.forEach((advert) => {
+    const {location} = advert;
+    const icon = L.icon({
+      iconUrl: '../leaflet/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [13, 41],
+    });
+
+    const marker = L.marker(
+      {
+        lat:location.x,
+        lng:location.y,
+      },
+      {
+        icon,
+      },
+    );
+
+    marker
+      .addTo(map)
+      .bindPopup(
+        createCard(advert),
+      );
+  });
+}
+
+export {createMap}

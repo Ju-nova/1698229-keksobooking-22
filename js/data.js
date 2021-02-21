@@ -1,5 +1,4 @@
 import {getRandomNumber, getArrayRandElement, getRandomArray } from './util.js';
-import {createCoordinates} from './map.js';
 
 const AMOUNT_ADVERT = 10;
 
@@ -64,7 +63,28 @@ const photos = [
   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   'http://o0.github.io/assets/images/tokyo/hotel3.jpg',
 ]
+// координаты по умолчанию
+const Coordinates = {
+  x: {
+    MIN: 35.65,
+    MAX: 35.7,
+    NUMBER_OF_DIGITS: 5,
+  },
+  y: {
+    MIN: 139.7,
+    MAX: 139.8,
+    NUMBER_OF_DIGITS: 5,
+  },
+}
 
+const createCoordinates = () => {
+  const coordinatesLocation = {
+    x: getRandomNumber(Coordinates.x.MIN, Coordinates.x.MAX, Coordinates.x.NUMBER_OF_DIGITS),
+    y: getRandomNumber(Coordinates.y.MIN, Coordinates.y.MAX, Coordinates.y.NUMBER_OF_DIGITS),
+  };
+
+  return coordinatesLocation;
+};
 //Создаем массив из аватарок
 const avatars = [];//сначала пустой массив
 // потом цикл, который нам сгенерирует 8 аватарок
@@ -107,8 +127,7 @@ const createAdvert = () => {
   return advert;
 };
 
-// Создаем массив случайных объявлений
+// Создаем массив 10 случайных объявлений
 const adverts =  new Array(AMOUNT_ADVERT).fill('').map(() => createAdvert());
 
-export {adverts, createAdvert, checkHours};
-
+export { checkHours, adverts};
