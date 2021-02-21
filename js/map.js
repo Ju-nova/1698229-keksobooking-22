@@ -49,7 +49,7 @@ const createMap = () =>{
     },
   );
   mainPinMarker.addTo(map);
-
+  formAddress.disabled = true;
   //добавляем координаты маркера в форму
   formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
 
@@ -57,6 +57,7 @@ const createMap = () =>{
   mainPinMarker.on('moveend', (evt) => {
     const newAddressForm = evt.target.getLatLng();
     formAddress.value = `${(newAddressForm.lat).toFixed(5)}, ${(newAddressForm.lng).toFixed(5)}`;
+    console.log(formAddress.value)
   });
 
   //добавляем маркеры и заполняем балун со случайными объявлениями
