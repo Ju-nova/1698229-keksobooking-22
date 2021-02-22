@@ -1,7 +1,6 @@
 import {setFormHandler, defineSelected} from './form.js';
-import {adverts} from './mock.js';
-import {createCard} from  './similar-adverts.js';
+import  {createMap} from './map.js';
 
-createCard(adverts[0]);
 setFormHandler();
 defineSelected();
+createMap()

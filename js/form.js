@@ -1,11 +1,41 @@
-import {checkHours} from './mock.js';
+import {checkHours} from './data.js';
 
 const inputPrice = document.querySelector('#price');
 const selectType = document.querySelector('#type');
 const selectedType =  selectType.querySelector('option:checked').value;
 const selectTimeIn = document.querySelector('#timein');
 const selectTimeOut = document.querySelector('#timeout');
+const form = document.querySelector('.ad-form');
+const mapFilters = document.querySelector('.map__filters');
+const inputFieldset = form.querySelectorAll('fieldset');
 
+
+const  disableFormItem = (item) =>{
+  for (let i = 0; i < item.length; i++) {
+    const disableItem = item[i];
+    disableItem.disabled = true;
+  }
+};
+//делаем форму недоступной
+const disabledForm = () => {
+  form.classList.add('ad-form--disabled');
+  mapFilters.classList.add('map-form--disabled');
+  mapFilters.disabled = true;
+  disableFormItem(inputFieldset);
+}
+
+const  unDisableFormItem = (item) =>{
+  for (let i = 0; i < item.length; i++) {
+    const disableItem = item[i];
+    disableItem.disabled = false;
+  }
+};
+const unDisabledForm = () => {
+  form.classList.remove('ad-form--disabled');
+  mapFilters.classList.remove('map-form--disabled');
+  mapFilters.disabled = false;
+  unDisableFormItem(inputFieldset);
+}
 //связываем цену с типом жилища
 const typePrice = {
   'bungalow': 0,
@@ -62,4 +92,5 @@ const setFormHandler = () => {
   selectType.addEventListener('change', syncronizeTypePrice);
 }
 
-export {setFormHandler, defineSelected};
+export {setFormHandler, defineSelected, disabledForm, unDisabledForm};
+

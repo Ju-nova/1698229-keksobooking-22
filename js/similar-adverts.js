@@ -1,7 +1,5 @@
 import {declOfNum} from './util.js';
 
-const popupMap = document.querySelector('.map__canvas');//куда вставляем
-
 const similarCardTemplate = document.querySelector('#card')// сам шаблон
   .content
   .querySelector('.popup'); //элемент внутри шаблона, в котором заменяем контент
@@ -59,7 +57,7 @@ const createCard = (card) => {
     }
   } else photoList.remove();
 
-  popupMap.appendChild(similarCard);
+  return similarCard;
 };
 
 export {createCard};
