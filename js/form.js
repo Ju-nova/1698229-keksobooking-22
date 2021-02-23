@@ -1,13 +1,21 @@
-import {checkHours} from './data.js';
+import {checkHours} from './mock.js';
 
-const inputPrice = document.querySelector('#price');
-const selectType = document.querySelector('#type');
-const selectedType =  selectType.querySelector('option:checked').value;
-const selectTimeIn = document.querySelector('#timein');
-const selectTimeOut = document.querySelector('#timeout');
+
+const Title = {
+  MIN : 30,
+  MAX : 100,
+}
+
 const form = document.querySelector('.ad-form');
+const inputPrice = form.querySelector('#price');
+const selectType = form.querySelector('#type');
+const selectedType =  selectType.querySelector('option:checked').value;
+const selectTimeIn = form.querySelector('#timein');
+const selectTimeOut = form.querySelector('#timeout');
 const mapFilters = document.querySelector('.map__filters');
 const inputFieldset = form.querySelectorAll('fieldset');
+const inputTitle = document.querySelector('#title');
+
 
 
 const  disableFormItem = (item) =>{
@@ -24,17 +32,17 @@ const disabledForm = () => {
   disableFormItem(inputFieldset);
 }
 
-const  unDisableFormItem = (item) =>{
+const  enableFormItem = (item) =>{
   for (let i = 0; i < item.length; i++) {
     const disableItem = item[i];
     disableItem.disabled = false;
   }
 };
-const unDisabledForm = () => {
+const enableForm = () => {
   form.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map-form--disabled');
   mapFilters.disabled = false;
-  unDisableFormItem(inputFieldset);
+  enableFormItem(inputFieldset);
 }
 //связываем цену с типом жилища
 const typePrice = {
@@ -92,5 +100,79 @@ const setFormHandler = () => {
   selectType.addEventListener('change', syncronizeTypePrice);
 }
 
-export {setFormHandler, defineSelected, disabledForm, unDisabledForm};
+// const titleInput = document.querySelector('.setup-user-name');
+
+inputTitle.addEventListener('input', () => {
+  const valueLength = inputTitle.value.length;
+
+  if (valueLength < Title.MIN) {
+    inputTitle.setCustomValidity('Ещё ' + (Title.MIN - valueLength) +' симв.');
+  } else if (valueLength > Title.MAX) {
+    inputTitle.setCustomValidity('Удалите лишние ' + (valueLength - Title.MAX) +' симв.');
+  } else {
+    inputTitle.setCustomValidity('');
+  }
+  inputTitle.reportValidity();
+});
+
+
+inputPrice.addEventListener('input', () => {
+  const validity = inputPrice.validity;
+  if (validity.rangeOverflow) {
+    inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`)
+  } else if (validity.rangeUnderflow) {
+    inputPrice.setCustomValidity (`Минимум ${inputPrice.min} , меньше нельзя`)
+  } else {
+    inputPrice.setCustomValidity('')
+  }
+  inputPrice.reportValidity();
+});
+
+
+// const roomsArray = Object.keys(roomToCapaсity);
+// const guestsArrays = Object.values(roomToCapaсity);
+
+
+// getGuestArray();
+
+// guestsArray.forEach((value, index, array) => {
+//   console.log(value);
+// });
+
+// console.log(bla)
+const roomToCapaсity = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
+// console.log(roomToCapaсity[value])
+const selectRoomNumber = form.querySelector('#room_number');
+const selectGuests = form.querySelector('#capacity');
+const guestOptions = selectGuests.querySelectorAll('option');
+// console.log(guestOptions)
+// for (let i = 0; i < arr.length; i++) {
+//   alert( arr[i] );
+// }
+
+// const roomOptions = selectRoomNumber.children;
+// console.log(guestOptions)
+selectRoomNumber.addEventListener('change', (evt) =>{
+  //массив со значениями всех option гостей
+  const rooms = roomToCapaсity[evt.target.value];
+
+  guestOptions.forEach((option) => {
+    option.disabled = true;
+    option.selected = false;
+
+    rooms.forEach((room) => {
+      if (+option.value === +room) {
+        option.disabled = false;
+        option.selected = true;
+      }
+    })
+  })
+});
+// console.log(guestsArray[0].value)
+export {setFormHandler, defineSelected, disabledForm, enableForm};
 
