@@ -1,17 +1,11 @@
-import {checkHours} from './mock.js';
+//import {checkHours} from './mock.js';
 
-const form = document.querySelector('.ad-form');
-const inputPrice = form.querySelector('#price');
-const selectType = form.querySelector('#type');
-const selectedType =  selectType.querySelector('option:checked').value;
-const selectTimeIn = form.querySelector('#timein');
-const selectTimeOut = form.querySelector('#timeout');
-const mapFilters = document.querySelector('.map__filters');
-const inputFieldset = form.querySelectorAll('fieldset');
-const inputTitle = document.querySelector('#title');
-const selectRoomNumber = form.querySelector('#room_number');
-const selectGuests = form.querySelector('#capacity');
-const guestOptions = selectGuests.querySelectorAll('option');
+// массив с временем заселения.отъезда
+const checkHours = [
+  '12:00',
+  '13:00',
+  '14:00',
+];
 
 const Title = {
   MIN : 30,
@@ -25,12 +19,17 @@ const roomToCapaсity = {
   100: [0],
 };
 
+const form = document.querySelector('.ad-form');
+
 const  disableFormItem = (item) =>{
   for (let i = 0; i < item.length; i++) {
     const disableItem = item[i];
     disableItem.disabled = true;
   }
 };
+
+const mapFilters = document.querySelector('.map__filters');
+const inputFieldset = form.querySelectorAll('fieldset');
 //делаем форму недоступной
 const disabledForm = () => {
   form.classList.add('ad-form--disabled');
@@ -63,6 +62,8 @@ const typePrice = {
 const types = Object.keys(typePrice);
 const prices = Object.values(typePrice);
 
+const inputPrice = form.querySelector('#price');
+const selectType = form.querySelector('#type');
 // меняем минимальную цену и плэйсхолдер в зависимости от выбранного жилища
 const  syncronizeTypePrice = () =>{
   for (let i = 0; i < types.length; i++) {
@@ -73,6 +74,7 @@ const  syncronizeTypePrice = () =>{
   }
 };
 
+const selectedType =  selectType.querySelector('option:checked').value;
 //при загрузке страницы минимальная цена и правильный плэйсхолдер, который соответствует выбранному элементу по умолчанию
 const defineSelected = () =>{
   for (let i = 0; i < types.length; i++) {
@@ -83,6 +85,8 @@ const defineSelected = () =>{
   }
 }
 
+const selectTimeIn = form.querySelector('#timein');
+const selectTimeOut = form.querySelector('#timeout');
 //синхронизируем время заезда-отъезда
 const synchronizeTimeIn = () => {
   for (let i = 0; i < checkHours.length; i++) {
@@ -99,6 +103,10 @@ const synchronizeTimeOut = () => {
     }
   }
 }
+
+const selectRoomNumber = form.querySelector('#room_number');
+const selectGuests = form.querySelector('#capacity');
+const guestOptions = selectGuests.querySelectorAll('option');
 const synchronizeGuestsRooms = (evt) => {
   const rooms = roomToCapaсity[evt.target.value];
 
@@ -122,6 +130,7 @@ const setFormHandler = () => {
   selectRoomNumber.addEventListener('change', synchronizeGuestsRooms);
 }
 
+const inputTitle = document.querySelector('#title');
 //валидация заголовка
 const validateInputTitle = () => {
   const valueLength = inputTitle.value.length;

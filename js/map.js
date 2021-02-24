@@ -1,6 +1,8 @@
 /* global L:readonly */
 import {disabledForm, enableForm} from './form.js';
-import {adverts} from './mock.js';
+import { getAdvertsFromServer } from './server.js';
+// import {dataFromServer} from './server.js';
+// import {adverts} from './mock.js';
 import {createCard} from './similar-adverts.js';
 
 const formAddress = document.querySelector('#address');
@@ -11,7 +13,7 @@ const centerCoordinates = {
 }
 
 //функция для создания карты
-const createMap = () =>{
+const createMap = async () =>{
 
   //форма недоступна, пока не загрузится карта
   disabledForm();
@@ -64,6 +66,8 @@ const createMap = () =>{
   });
 
   //добавляем маркеры и заполняем балун со случайными объявлениями
+
+  const adverts = await getAdvertsFromServer();
   adverts.forEach((advert) => {
     const {location} = advert;
     const icon = L.icon({
@@ -74,8 +78,8 @@ const createMap = () =>{
 
     const marker = L.marker(
       {
-        lat:location.x,
-        lng:location.y,
+        lat:location.lat,
+        lng:location.lng,
       },
       {
         icon,
