@@ -1,6 +1,6 @@
 /* global L:readonly */
-import {disabledForm, unDisabledForm} from './form.js';
-import {adverts} from './data.js';
+import {disabledForm, enableForm} from './form.js';
+import {adverts} from './mock.js';
 import {createCard} from './similar-adverts.js';
 
 const formAddress = document.querySelector('#address');
@@ -18,7 +18,7 @@ const createMap = () =>{
 
   //загружаем карту, и делаем форму доступной
   const map = L.map('map-canvas').on('load', () => {
-    unDisabledForm();
+    enableForm();
   }).setView({
     lat: centerCoordinates.lat,
     lng: centerCoordinates.lng,
@@ -33,7 +33,7 @@ const createMap = () =>{
 
   //устанавливаем маркер и иконку в центр карты
   const mainPinIcon = L.icon({
-    iconUrl: '../leaflet/images/marker-icon-2x.png',
+    iconUrl: 'img/main-pin.svg',
     iconSize: [50, 82],
     iconAnchor: [25, 82],
   });
@@ -51,13 +51,13 @@ const createMap = () =>{
   mainPinMarker.addTo(map);
 
   //запрещаем ручное редактирование формы
-  formAddress.disabled = true;
+  formAddress.setAttribute('readonly', 'true');
 
   //добавляем координаты маркера в форму
   formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
 
   //добавляем координаты передвинутого маркера в форму
-  mainPinMarker.on('moveend', (evt) => {
+  mainPinMarker.on('move', (evt) => {
     const newAddressForm = evt.target.getLatLng();
     formAddress.value = `${(newAddressForm.lat).toFixed(5)}, ${(newAddressForm.lng).toFixed(5)}`;
 
@@ -67,7 +67,7 @@ const createMap = () =>{
   adverts.forEach((advert) => {
     const {location} = advert;
     const icon = L.icon({
-      iconUrl: '../leaflet/images/marker-icon.png',
+      iconUrl: 'img/pin.svg',
       iconSize: [25, 41],
       iconAnchor: [13, 41],
     });
