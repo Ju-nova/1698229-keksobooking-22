@@ -67,7 +67,7 @@ const createMap = () =>{
   adverts.forEach((advert) => {
     const {location} = advert;
     const icon = L.icon({
-      iconUrl: '../leaflet/images/marker-icon.png',
+      iconUrl: 'img/pin.svg',
       iconSize: [25, 41],
       iconAnchor: [13, 41],
     });

@@ -1,11 +1,5 @@
 import {checkHours} from './mock.js';
 
-
-const Title = {
-  MIN : 30,
-  MAX : 100,
-}
-
 const form = document.querySelector('.ad-form');
 const inputPrice = form.querySelector('#price');
 const selectType = form.querySelector('#type');
@@ -15,8 +9,21 @@ const selectTimeOut = form.querySelector('#timeout');
 const mapFilters = document.querySelector('.map__filters');
 const inputFieldset = form.querySelectorAll('fieldset');
 const inputTitle = document.querySelector('#title');
+const selectRoomNumber = form.querySelector('#room_number');
+const selectGuests = form.querySelector('#capacity');
+const guestOptions = selectGuests.querySelectorAll('option');
 
+const Title = {
+  MIN : 30,
+  MAX : 100,
+}
 
+const roomToCapaсity = {
+  1: [1],
+  2: [1, 2],
+  3: [1, 2, 3],
+  100: [0],
+};
 
 const  disableFormItem = (item) =>{
   for (let i = 0; i < item.length; i++) {
@@ -92,73 +99,7 @@ const synchronizeTimeOut = () => {
     }
   }
 }
-
-// основная функция синхронизации в форме
-const setFormHandler = () => {
-  selectTimeIn.addEventListener('change', synchronizeTimeIn);
-  selectTimeOut.addEventListener('change', synchronizeTimeOut);
-  selectType.addEventListener('change', syncronizeTypePrice);
-}
-
-// const titleInput = document.querySelector('.setup-user-name');
-
-inputTitle.addEventListener('input', () => {
-  const valueLength = inputTitle.value.length;
-
-  if (valueLength < Title.MIN) {
-    inputTitle.setCustomValidity('Ещё ' + (Title.MIN - valueLength) +' симв.');
-  } else if (valueLength > Title.MAX) {
-    inputTitle.setCustomValidity('Удалите лишние ' + (valueLength - Title.MAX) +' симв.');
-  } else {
-    inputTitle.setCustomValidity('');
-  }
-  inputTitle.reportValidity();
-});
-
-
-inputPrice.addEventListener('input', () => {
-  const validity = inputPrice.validity;
-  if (validity.rangeOverflow) {
-    inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`)
-  } else if (validity.rangeUnderflow) {
-    inputPrice.setCustomValidity (`Минимум ${inputPrice.min} , меньше нельзя`)
-  } else {
-    inputPrice.setCustomValidity('')
-  }
-  inputPrice.reportValidity();
-});
-
-
-// const roomsArray = Object.keys(roomToCapaсity);
-// const guestsArrays = Object.values(roomToCapaсity);
-
-
-// getGuestArray();
-
-// guestsArray.forEach((value, index, array) => {
-//   console.log(value);
-// });
-
-// console.log(bla)
-const roomToCapaсity = {
-  1: [1],
-  2: [1, 2],
-  3: [1, 2, 3],
-  100: [0],
-};
-// console.log(roomToCapaсity[value])
-const selectRoomNumber = form.querySelector('#room_number');
-const selectGuests = form.querySelector('#capacity');
-const guestOptions = selectGuests.querySelectorAll('option');
-// console.log(guestOptions)
-// for (let i = 0; i < arr.length; i++) {
-//   alert( arr[i] );
-// }
-
-// const roomOptions = selectRoomNumber.children;
-// console.log(guestOptions)
-selectRoomNumber.addEventListener('change', (evt) =>{
-  //массив со значениями всех option гостей
+const synchronizeGuestsRooms = (evt) => {
   const rooms = roomToCapaсity[evt.target.value];
 
   guestOptions.forEach((option) => {
@@ -172,7 +113,48 @@ selectRoomNumber.addEventListener('change', (evt) =>{
       }
     })
   })
-});
-// console.log(guestsArray[0].value)
-export {setFormHandler, defineSelected, disabledForm, enableForm};
+}
+// основная функция синхронизации в форме
+const setFormHandler = () => {
+  selectTimeIn.addEventListener('change', synchronizeTimeIn);
+  selectTimeOut.addEventListener('change', synchronizeTimeOut);
+  selectType.addEventListener('change', syncronizeTypePrice);
+  selectRoomNumber.addEventListener('change', synchronizeGuestsRooms);
+}
+
+//валидация заголовка
+const validateInputTitle = () => {
+  const valueLength = inputTitle.value.length;
+
+  if (valueLength < Title.MIN) {
+    inputTitle.setCustomValidity('Ещё ' + (Title.MIN - valueLength) +' симв.');
+  } else if (valueLength > Title.MAX) {
+    inputTitle.setCustomValidity('Удалите лишние ' + (valueLength - Title.MAX) +' симв.');
+  } else {
+    inputTitle.setCustomValidity('');
+  }
+  inputTitle.reportValidity();
+}
+
+//валидация цены
+const validateInputPrice = () => {
+  const validity = inputPrice.validity;
+  if (validity.rangeOverflow) {
+    inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`)
+  } else if (validity.rangeUnderflow) {
+    inputPrice.setCustomValidity (`Минимум ${inputPrice.min} , меньше нельзя`)
+  } else {
+    inputPrice.setCustomValidity('')
+  }
+  inputPrice.reportValidity();
+}
+
+//общая валидация формы
+const validateForm = () => {
+  inputTitle.addEventListener('input', validateInputTitle );
+  inputPrice.addEventListener('input', validateInputPrice );
+}
+
+
+export {setFormHandler, defineSelected, disabledForm, enableForm, validateForm};
 
