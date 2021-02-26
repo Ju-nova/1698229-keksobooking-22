@@ -1,8 +1,6 @@
 /* global L:readonly */
 import {disabledForm, enableForm} from './form.js';
 import { getAdvertsFromServer } from './server.js';
-// import {dataFromServer} from './server.js';
-// import {adverts} from './mock.js';
 import {createCard} from './similar-adverts.js';
 
 const formAddress = document.querySelector('#address');
@@ -10,6 +8,11 @@ const formAddress = document.querySelector('#address');
 const centerCoordinates = {
   lat: 35.68955,
   lng: 139.69222,
+}
+const form = document.querySelector('.ad-form');
+const buttonReset = form.querySelector('.ad-form__reset');
+const getAddressDefault = () =>{
+  formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
 }
 
 //функция для создания карты
@@ -56,7 +59,9 @@ const createMap = async () =>{
   formAddress.setAttribute('readonly', 'true');
 
   //добавляем координаты маркера в форму
-  formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
+  getAddressDefault();
+
+  // formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
 
   //добавляем координаты передвинутого маркера в форму
   mainPinMarker.on('move', (evt) => {
@@ -92,6 +97,19 @@ const createMap = async () =>{
         createCard(advert),
       );
   });
+
+  buttonReset.addEventListener('click', (evt) => {
+    evt.preventDefault();
+
+    form.reset();
+    getAddressDefault();
+    map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
+    mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
+
+  },
+
+  )
 }
 
-export {createMap}
+
+export {createMap, getAddressDefault}

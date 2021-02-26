@@ -1,4 +1,6 @@
-//import {checkHours} from './mock.js';
+
+import {sendData} from './server.js';
+// import {centerCoordinates} from './map.js';
 
 // массив с временем заселения.отъезда
 const checkHours = [
@@ -164,6 +166,20 @@ const validateForm = () => {
   inputPrice.addEventListener('input', validateInputPrice );
 }
 
+//отправка формы
+const setFormSubmit = (success, fail) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
 
-export {setFormHandler, defineSelected, disabledForm, enableForm, validateForm};
+    sendData(
+      () => success(),
+      () => fail(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+
+
+export {setFormHandler, defineSelected, disabledForm, enableForm, validateForm,  setFormSubmit};
 

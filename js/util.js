@@ -35,4 +35,13 @@ const declOfNum = (number, words) => {
   return words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
 }
 
-export {getRandomNumber, getArrayRandElement, getRandomArray, declOfNum };
+
+const isEnterEvent = (evt) => {
+  return evt.key === 'Enter';
+};
+
+const isEscEvent = (evt) => {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+};
+
+export {getRandomNumber, getArrayRandElement, getRandomArray, declOfNum, isEnterEvent, isEscEvent };
