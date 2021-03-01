@@ -8,14 +8,10 @@ const getAdvertsFromServer = async () => {
       if (response.ok) {
         return response.json();
       } else {
-        onLoadError('Данные не пришли с сервера');
+        onLoadError('Данные не пришли с сервера. Обновить страницу');
       }
     })
-    .then((adverts) => adverts)
-    .catch(() => {
-      onLoadError('Данные не пришли с сервера');
-    });
-}
+};
 
 ///отправляем данные из формы
 const sendData = (onSuccess, onFail, body) => {
@@ -41,4 +37,3 @@ const sendData = (onSuccess, onFail, body) => {
 
 export {getAdvertsFromServer, sendData}
 
-// export {dataFromServer }

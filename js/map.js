@@ -3,12 +3,13 @@ import {disabledForm, enableForm} from './form.js';
 import { getAdvertsFromServer } from './server.js';
 import {createCard} from './similar-adverts.js';
 
-const formAddress = document.querySelector('#address');
 //координаты центра карты
 const centerCoordinates = {
   lat: 35.68955,
   lng: 139.69222,
 }
+
+const formAddress = document.querySelector('#address');
 const form = document.querySelector('.ad-form');
 const buttonReset = form.querySelector('.ad-form__reset');
 const getAddressDefault = () =>{
@@ -73,30 +74,33 @@ const createMap = async () =>{
   //добавляем маркеры и заполняем балун со случайными объявлениями
 
   const adverts = await getAdvertsFromServer();
-  adverts.forEach((advert) => {
-    const {location} = advert;
-    const icon = L.icon({
-      iconUrl: 'img/pin.svg',
-      iconSize: [25, 41],
-      iconAnchor: [13, 41],
-    });
+  if(adverts){
+    adverts.forEach((advert) => {
+      const {location} = advert;
+      const icon = L.icon({
+        iconUrl: 'img/pin.svg',
+        iconSize: [25, 41],
+        iconAnchor: [13, 41],
+      });
 
-    const marker = L.marker(
-      {
-        lat:location.lat,
-        lng:location.lng,
-      },
-      {
-        icon,
-      },
-    );
-
-    marker
-      .addTo(map)
-      .bindPopup(
-        createCard(advert),
+      const marker = L.marker(
+        {
+          lat:location.lat,
+          lng:location.lng,
+        },
+        {
+          icon,
+        },
       );
-  });
+
+      marker
+        .addTo(map)
+        .bindPopup(
+          createCard(advert),
+        );
+    });
+  }
+
 
   buttonReset.addEventListener('click', (evt) => {
     evt.preventDefault();

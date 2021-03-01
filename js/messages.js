@@ -29,17 +29,20 @@ const successTemplate = document.querySelector('#success').content.querySelector
 
 const onSuccess = () =>{
   const successFormMessage = successTemplate.cloneNode(true);
+
   successFormMessage.style.zIndex = '1000';
+
   main.appendChild(successFormMessage);
-  successFormMessage.addEventListener('click', () => {
-    successFormMessage.remove();
+
+  successFormMessage.addEventListener('click', (evt) => {
+    evt.target.remove();
   });
 
   document.addEventListener('keydown', (evt) => {
-
     if (isEscEvent(evt)) {
-      successFormMessage.remove()
+      evt.target.remove()
     }
+
   });
 
   form.reset();

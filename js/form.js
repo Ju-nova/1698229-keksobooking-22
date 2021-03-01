@@ -1,6 +1,4 @@
-
 import {sendData} from './server.js';
-// import {centerCoordinates} from './map.js';
 
 // массив с временем заселения.отъезда
 const checkHours = [
@@ -9,7 +7,7 @@ const checkHours = [
   '14:00',
 ];
 
-const Title = {
+const AdvertTitleLength = {
   MIN : 30,
   MAX : 100,
 }
@@ -107,11 +105,28 @@ const synchronizeTimeOut = () => {
 }
 
 const selectRoomNumber = form.querySelector('#room_number');
+const valueOptions = selectRoomNumber.value;
+// console.log(bla)
 const selectGuests = form.querySelector('#capacity');
 const guestOptions = selectGuests.querySelectorAll('option');
+
+
+const defaultSelectRoomGuest = () => {
+  const guests = roomToCapaсity[valueOptions];
+  guestOptions.forEach((option) => {
+    option.disabled = true;
+    option.selected = false;
+
+    guests.forEach((guest) => {
+      if (+option.value === +guest) {
+        option.disabled = false;
+        option.selected = true;
+      }
+    })
+  })
+}
 const synchronizeGuestsRooms = (evt) => {
   const rooms = roomToCapaсity[evt.target.value];
-
   guestOptions.forEach((option) => {
     option.disabled = true;
     option.selected = false;
@@ -124,11 +139,13 @@ const synchronizeGuestsRooms = (evt) => {
     })
   })
 }
+// synchronizeGuestsRooms();
 // основная функция синхронизации в форме
 const setFormHandler = () => {
   selectTimeIn.addEventListener('change', synchronizeTimeIn);
   selectTimeOut.addEventListener('change', synchronizeTimeOut);
   selectType.addEventListener('change', syncronizeTypePrice);
+  defaultSelectRoomGuest();
   selectRoomNumber.addEventListener('change', synchronizeGuestsRooms);
 }
 
@@ -137,10 +154,10 @@ const inputTitle = document.querySelector('#title');
 const validateInputTitle = () => {
   const valueLength = inputTitle.value.length;
 
-  if (valueLength < Title.MIN) {
-    inputTitle.setCustomValidity('Ещё ' + (Title.MIN - valueLength) +' симв.');
-  } else if (valueLength > Title.MAX) {
-    inputTitle.setCustomValidity('Удалите лишние ' + (valueLength - Title.MAX) +' симв.');
+  if (valueLength < AdvertTitleLength.MIN) {
+    inputTitle.setCustomValidity('Ещё ' + (AdvertTitleLength.MIN - valueLength) +' симв.');
+  } else if (valueLength > AdvertTitleLength.MAX) {
+    inputTitle.setCustomValidity('Удалите лишние ' + (valueLength - AdvertTitleLength.MAX) +' симв.');
   } else {
     inputTitle.setCustomValidity('');
   }
