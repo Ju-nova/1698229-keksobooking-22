@@ -1,5 +1,5 @@
 import {isEnterEvent, isEscEvent} from './util.js';
-import {getAddressDefault} from './map.js';
+
 
 //сообщение для ошибочной загрузки карты(данные с сервера не получены)
 const onLoadError = (errorMessage) => {
@@ -24,7 +24,6 @@ const onLoadError = (errorMessage) => {
 
 //успех для формы
 const main = document.querySelector('main');
-const form = document.querySelector('.ad-form');
 const successTemplate = document.querySelector('#success').content.querySelector('.success')
 
 const onSuccess = () =>{
@@ -33,20 +32,17 @@ const onSuccess = () =>{
   successFormMessage.style.zIndex = '1000';
 
   main.appendChild(successFormMessage);
-
   successFormMessage.addEventListener('click', (evt) => {
     evt.target.remove();
   });
 
   document.addEventListener('keydown', (evt) => {
+
     if (isEscEvent(evt)) {
       evt.target.remove()
     }
-
   });
 
-  form.reset();
-  getAddressDefault();
 
   setTimeout(() => {
     successFormMessage.remove();

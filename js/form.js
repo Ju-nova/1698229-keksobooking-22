@@ -106,7 +106,6 @@ const synchronizeTimeOut = () => {
 
 const selectRoomNumber = form.querySelector('#room_number');
 const valueOptions = selectRoomNumber.value;
-// console.log(bla)
 const selectGuests = form.querySelector('#capacity');
 const guestOptions = selectGuests.querySelectorAll('option');
 
@@ -139,9 +138,10 @@ const synchronizeGuestsRooms = (evt) => {
     })
   })
 }
-// synchronizeGuestsRooms();
+
 // основная функция синхронизации в форме
 const setFormHandler = () => {
+  defineSelected();
   selectTimeIn.addEventListener('change', synchronizeTimeIn);
   selectTimeOut.addEventListener('change', synchronizeTimeOut);
   selectType.addEventListener('change', syncronizeTypePrice);
@@ -198,5 +198,5 @@ const setFormSubmit = (success, fail) => {
 
 
 
-export {setFormHandler, defineSelected, disabledForm, enableForm, validateForm,  setFormSubmit};
+export {setFormHandler, disabledForm, enableForm, validateForm,  setFormSubmit};
 

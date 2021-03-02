@@ -1,6 +1,6 @@
 
 import {onLoadError} from './messages.js';
-
+import {resetForm} from './map.js';
 //получаем данные с сервера для карты
 const getAdvertsFromServer = async () => {
   return fetch('https://22.javascript.pages.academy/keksobooking/data')
@@ -25,6 +25,7 @@ const sendData = (onSuccess, onFail, body) => {
     .then((response) => {
       if (response.ok) {
         onSuccess();
+        resetForm();
       } else {
         onFail();
       }

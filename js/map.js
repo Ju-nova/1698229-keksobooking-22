@@ -1,5 +1,5 @@
 /* global L:readonly */
-import {disabledForm, enableForm} from './form.js';
+import {disabledForm, enableForm, setFormHandler} from './form.js';
 import { getAdvertsFromServer } from './server.js';
 import {createCard} from './similar-adverts.js';
 
@@ -16,6 +16,33 @@ const getAddressDefault = () =>{
   formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
 }
 
+
+const map = L.map('map-canvas');
+//устанавливаем маркер и иконку в центр карты
+const mainPinIcon = L.icon({
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [50, 82],
+  iconAnchor: [25, 82],
+});
+
+const mainPinMarker = L.marker(
+  {
+    lat: centerCoordinates.lat,
+    lng: centerCoordinates.lng,
+  },
+  {
+    draggable: true,
+    icon: mainPinIcon,
+  },
+);
+
+const resetForm = () => {
+  form.reset();
+  getAddressDefault();
+  setFormHandler();
+  map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng), 10);
+  mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
+};
 //функция для создания карты
 const createMap = async () =>{
 
@@ -23,7 +50,7 @@ const createMap = async () =>{
   disabledForm();
 
   //загружаем карту, и делаем форму доступной
-  const map = L.map('map-canvas').on('load', () => {
+  map.on('load', () => {
     enableForm();
   }).setView({
     lat: centerCoordinates.lat,
@@ -36,24 +63,6 @@ const createMap = async () =>{
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     },
   ).addTo(map);
-
-  //устанавливаем маркер и иконку в центр карты
-  const mainPinIcon = L.icon({
-    iconUrl: 'img/main-pin.svg',
-    iconSize: [50, 82],
-    iconAnchor: [25, 82],
-  });
-
-  const mainPinMarker = L.marker(
-    {
-      lat: centerCoordinates.lat,
-      lng: centerCoordinates.lng,
-    },
-    {
-      draggable: true,
-      icon: mainPinIcon,
-    },
-  );
   mainPinMarker.addTo(map);
 
   //запрещаем ручное редактирование формы
@@ -62,7 +71,6 @@ const createMap = async () =>{
   //добавляем координаты маркера в форму
   getAddressDefault();
 
-  // formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
 
   //добавляем координаты передвинутого маркера в форму
   mainPinMarker.on('move', (evt) => {
@@ -102,18 +110,13 @@ const createMap = async () =>{
   }
 
 
+
   buttonReset.addEventListener('click', (evt) => {
     evt.preventDefault();
-
-    form.reset();
-    getAddressDefault();
-    map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
-    mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
-
+    resetForm();
   },
-
   )
 }
 
 
-export {createMap, getAddressDefault}
+export {createMap, getAddressDefault,resetForm}
