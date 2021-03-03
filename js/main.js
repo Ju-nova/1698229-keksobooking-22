@@ -1,8 +1,9 @@
-import {setFormHandler, defineSelected, validateForm} from './form.js';
-import  {createMap} from './map.js';
+import {setFormHandler, validateForm, setFormSubmit}  from './form.js';
+import {onSuccess, onFail}  from './messages.js';
+import {createMap} from './map.js';
 
 setFormHandler();
-defineSelected();
 validateForm()
 createMap();
+setFormSubmit(onSuccess, onFail);
 

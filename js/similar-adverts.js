@@ -46,7 +46,7 @@ const createCard = (card) => {
     }
   } else featureList.remove();
 
-  // создаем изображения  в соотсветствии с массивом путей картинок
+  // создаем изображения  в соответствии с массивом путей картинок
   const photoList = similarCard.querySelector('.popup__photos');
   if(card.offer.photos){
     photoList.innerHTML = '';
