@@ -74,17 +74,6 @@ const  syncronizeTypePrice = () =>{
   }
 };
 
-const selectedType =  selectType.querySelector('option:checked').value;
-//при загрузке страницы минимальная цена и правильный плэйсхолдер, который соответствует выбранному элементу по умолчанию
-const defineSelected = () =>{
-  for (let i = 0; i < types.length; i++) {
-    if ( selectedType === types[i]) {
-      inputPrice.placeholder = prices[i];
-      inputPrice.min = prices[i];
-    }
-  }
-}
-
 const selectTimeIn = form.querySelector('#timein');
 const selectTimeOut = form.querySelector('#timeout');
 //синхронизируем время заезда-отъезда
@@ -141,7 +130,6 @@ const synchronizeGuestsRooms = (evt) => {
 
 // основная функция синхронизации в форме
 const setFormHandler = () => {
-  defineSelected();
   selectTimeIn.addEventListener('change', synchronizeTimeIn);
   selectTimeOut.addEventListener('change', synchronizeTimeOut);
   selectType.addEventListener('change', syncronizeTypePrice);

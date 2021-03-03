@@ -3,10 +3,22 @@ import {disabledForm, enableForm, setFormHandler} from './form.js';
 import { getAdvertsFromServer } from './server.js';
 import {createCard} from './similar-adverts.js';
 
+const STYLE_MAP = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const COPYRIGTH_MAP = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 //координаты центра карты
 const centerCoordinates = {
   lat: 35.68955,
   lng: 139.69222,
+}
+const CenterMapPin = {
+  iconUrl: 'img/main-pin.svg',
+  iconSize: [50, 82],
+  iconAnchor: [25, 82],
+}
+const MapPin = {
+  iconUrl: 'img/pin.svg',
+  iconSize: [25, 41],
+  iconAnchor: [13, 41],
 }
 
 const formAddress = document.querySelector('#address');
@@ -16,13 +28,12 @@ const getAddressDefault = () =>{
   formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
 }
 
-
 const map = L.map('map-canvas');
 //устанавливаем маркер и иконку в центр карты
 const mainPinIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [50, 82],
-  iconAnchor: [25, 82],
+  iconUrl: CenterMapPin.iconUrl,
+  iconSize: CenterMapPin.iconSize,
+  iconAnchor: CenterMapPin.iconAnchor,
 });
 
 const mainPinMarker = L.marker(
@@ -58,9 +69,9 @@ const createMap = async () =>{
   }, 10);
 
   L.tileLayer(
-    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    STYLE_MAP,
     {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: COPYRIGTH_MAP,
     },
   ).addTo(map);
   mainPinMarker.addTo(map);
@@ -71,7 +82,6 @@ const createMap = async () =>{
   //добавляем координаты маркера в форму
   getAddressDefault();
 
-
   //добавляем координаты передвинутого маркера в форму
   mainPinMarker.on('move', (evt) => {
     const newAddressForm = evt.target.getLatLng();
@@ -80,15 +90,14 @@ const createMap = async () =>{
   });
 
   //добавляем маркеры и заполняем балун со случайными объявлениями
-
   const adverts = await getAdvertsFromServer();
   if(adverts){
     adverts.forEach((advert) => {
       const {location} = advert;
       const icon = L.icon({
-        iconUrl: 'img/pin.svg',
-        iconSize: [25, 41],
-        iconAnchor: [13, 41],
+        iconUrl: MapPin.iconUrl,
+        iconSize: MapPin.iconSize,
+        iconAnchor: MapPin.iconAnchor,
       });
 
       const marker = L.marker(
