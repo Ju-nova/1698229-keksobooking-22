@@ -1,22 +1,22 @@
+import {mapFiltersDisabled, resetForm} from './form.js';
 
-import {onLoadError} from './messages.js';
-import {resetForm} from './map.js';
+const GET_DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data';
+const SEND_DATA_URL = 'https://22.javascript.pages.academy/keksobooking';
+
 //получаем данные с сервера для карты
-const getAdvertsFromServer = async () => {
-  return fetch('https://22.javascript.pages.academy/keksobooking/data')
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        onLoadError('Данные не пришли с сервера. Обновить страницу');
-      }
-    })
-};
+const getAdvertsFromServer = () => fetch(GET_DATA_URL)
+  .then((response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      mapFiltersDisabled();
+    }
+  });
 
 ///отправляем данные из формы
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://22.javascript.pages.academy/keksobooking',
+    SEND_DATA_URL,
     {
       method: 'POST',
       body,

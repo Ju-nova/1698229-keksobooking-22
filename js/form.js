@@ -1,4 +1,6 @@
+/* global L:readonly */
 import {sendData} from './server.js';
+import {map, getAddressDefault, mainPinMarker, centerCoordinates, reCreateMap} from './map.js';
 
 // массив с временем заселения.отъезда
 const checkHours = [
@@ -29,12 +31,22 @@ const  disableFormItem = (item) =>{
 };
 
 const mapFilters = document.querySelector('.map__filters');
+const mapFiltersSelect =  mapFilters.querySelectorAll('.map__filter');
+const mapFiltersFieldset =  mapFilters.querySelector('.map__features');
+
+const mapFiltersDisabled = () =>{
+  mapFilters.classList.add('ad-form--disabled');
+  mapFilters.disabled = true;
+  disableFormItem(mapFiltersSelect);
+  disableFormItem(mapFiltersFieldset);
+}
+
 const inputFieldset = form.querySelectorAll('fieldset');
+
 //делаем форму недоступной
 const disabledForm = () => {
   form.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map-form--disabled');
-  mapFilters.disabled = true;
+  mapFiltersDisabled();
   disableFormItem(inputFieldset);
 }
 
@@ -44,10 +56,15 @@ const  enableFormItem = (item) =>{
     disableItem.disabled = false;
   }
 };
+const mapFiltersEnabled = () =>{
+  mapFilters.classList.remove('ad-form--disabled');
+  mapFilters.disabled = false;
+  enableFormItem(mapFiltersSelect);
+  enableFormItem(mapFiltersFieldset);
+}
 const enableForm = () => {
   form.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map-form--disabled');
-  mapFilters.disabled = false;
+  mapFiltersEnabled();
   enableFormItem(inputFieldset);
 }
 //связываем цену с типом жилища
@@ -73,17 +90,6 @@ const  syncronizeTypePrice = () =>{
     }
   }
 };
-
-const selectedType =  selectType.querySelector('option:checked').value;
-//при загрузке страницы минимальная цена и правильный плэйсхолдер, который соответствует выбранному элементу по умолчанию
-const defineSelected = () =>{
-  for (let i = 0; i < types.length; i++) {
-    if ( selectedType === types[i]) {
-      inputPrice.placeholder = prices[i];
-      inputPrice.min = prices[i];
-    }
-  }
-}
 
 const selectTimeIn = form.querySelector('#timein');
 const selectTimeOut = form.querySelector('#timeout');
@@ -141,7 +147,6 @@ const synchronizeGuestsRooms = (evt) => {
 
 // основная функция синхронизации в форме
 const setFormHandler = () => {
-  defineSelected();
   selectTimeIn.addEventListener('change', synchronizeTimeIn);
   selectTimeOut.addEventListener('change', synchronizeTimeOut);
   selectType.addEventListener('change', syncronizeTypePrice);
@@ -196,7 +201,16 @@ const setFormSubmit = (success, fail) => {
   });
 };
 
+const mapFilter = document.querySelector('.map__filters');
+const resetForm = () => {
+  form.reset();
+  reCreateMap();
+  mapFilter.reset();
+  getAddressDefault();
+  setFormHandler();
+  map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng), 10);
+  mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
+};
 
-
-export {setFormHandler, disabledForm, enableForm, validateForm,  setFormSubmit};
+export {setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled, resetForm};
 

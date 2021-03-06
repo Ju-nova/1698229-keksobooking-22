@@ -6,7 +6,6 @@ const Guest = {
   MIN : 1,
   MAX : 3,
 }
-
 const Room = {
   MIN : 1,
   MAX : 3,

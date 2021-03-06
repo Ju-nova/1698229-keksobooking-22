@@ -6,4 +6,3 @@ setFormHandler();
 validateForm()
 createMap();
 setFormSubmit(onSuccess, onFail);
-
