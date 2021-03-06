@@ -29,12 +29,22 @@ const  disableFormItem = (item) =>{
 };
 
 const mapFilters = document.querySelector('.map__filters');
+const mapFiltersSelect =  mapFilters.querySelectorAll('.map__filter');
+const mapFiltersFieldset =  mapFilters.querySelector('.map__features');
+
+const mapFiltersDisabled = () =>{
+  mapFilters.classList.add('ad-form--disabled');
+  mapFilters.disabled = true;
+  disableFormItem(mapFiltersSelect);
+  disableFormItem(mapFiltersFieldset);
+}
+
 const inputFieldset = form.querySelectorAll('fieldset');
+
 //делаем форму недоступной
 const disabledForm = () => {
   form.classList.add('ad-form--disabled');
-  mapFilters.classList.add('map-form--disabled');
-  mapFilters.disabled = true;
+  mapFiltersDisabled();
   disableFormItem(inputFieldset);
 }
 
@@ -44,10 +54,15 @@ const  enableFormItem = (item) =>{
     disableItem.disabled = false;
   }
 };
+const mapFiltersEnabled = () =>{
+  mapFilters.classList.remove('ad-form--disabled');
+  mapFilters.disabled = false;
+  enableFormItem(mapFiltersSelect);
+  enableFormItem(mapFiltersFieldset);
+}
 const enableForm = () => {
   form.classList.remove('ad-form--disabled');
-  mapFilters.classList.remove('map-form--disabled');
-  mapFilters.disabled = false;
+  mapFiltersEnabled();
   enableFormItem(inputFieldset);
 }
 //связываем цену с типом жилища
@@ -186,5 +201,5 @@ const setFormSubmit = (success, fail) => {
 
 
 
-export {setFormHandler, disabledForm, enableForm, validateForm,  setFormSubmit};
+export {setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled};
 

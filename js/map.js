@@ -2,7 +2,9 @@
 import {disabledForm, enableForm, setFormHandler} from './form.js';
 import { getAdvertsFromServer } from './server.js';
 import {createCard} from './similar-adverts.js';
+//import {filterType} from './filter.js';
 
+const AMOUNT_ADVERT = 10;
 const STYLE_MAP = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const COPYRIGTH_MAP = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 //координаты центра карты
@@ -23,6 +25,8 @@ const MapPin = {
 
 const formAddress = document.querySelector('#address');
 const form = document.querySelector('.ad-form');
+const mapFilter = document.querySelector('.map__filters');
+// const typeFilter = mapFilter.querySelector('#housing-type');
 const buttonReset = form.querySelector('.ad-form__reset');
 const getAddressDefault = () =>{
   formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
@@ -47,13 +51,18 @@ const mainPinMarker = L.marker(
   },
 );
 
+
+
+
 const resetForm = () => {
   form.reset();
+  mapFilter.reset();
   getAddressDefault();
   setFormHandler();
   map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng), 10);
   mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
 };
+
 //функция для создания карты
 const createMap = async () =>{
 
@@ -91,8 +100,10 @@ const createMap = async () =>{
 
   //добавляем маркеры и заполняем балун со случайными объявлениями
   const adverts = await getAdvertsFromServer();
+
   if(adverts){
-    adverts.forEach((advert) => {
+    const newAdverts = adverts.slice(0, AMOUNT_ADVERT)
+    newAdverts.forEach((advert) => {
       const {location} = advert;
       const icon = L.icon({
         iconUrl: MapPin.iconUrl,
@@ -115,9 +126,12 @@ const createMap = async () =>{
         .bindPopup(
           createCard(advert),
         );
-    });
-  }
 
+    });
+
+
+
+  }
 
 
   buttonReset.addEventListener('click', (evt) => {
@@ -125,7 +139,8 @@ const createMap = async () =>{
     resetForm();
   },
   )
+
 }
 
 
-export {createMap, getAddressDefault,resetForm}
+export {createMap, getAddressDefault, resetForm}
