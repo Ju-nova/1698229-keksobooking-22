@@ -1,4 +1,6 @@
+/* global L:readonly */
 import {sendData} from './server.js';
+import {map, getAddressDefault, mainPinMarker, centerCoordinates, reCreateMap} from './map.js';
 
 // массив с временем заселения.отъезда
 const checkHours = [
@@ -199,7 +201,16 @@ const setFormSubmit = (success, fail) => {
   });
 };
 
+const mapFilter = document.querySelector('.map__filters');
+const resetForm = () => {
+  form.reset();
+  reCreateMap();
+  mapFilter.reset();
+  getAddressDefault();
+  setFormHandler();
+  map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng), 10);
+  mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
+};
 
-
-export {setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled};
+export {setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled, resetForm};
 

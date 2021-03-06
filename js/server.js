@@ -1,17 +1,14 @@
-import {onLoadError} from './messages.js';
-import {resetForm} from './map.js';
-import {mapFiltersDisabled} from './form.js';
+import {mapFiltersDisabled, resetForm} from './form.js';
 
 const GET_DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data';
 const SEND_DATA_URL = 'https://22.javascript.pages.academy/keksobooking';
 
 //получаем данные с сервера для карты
-const getAdvertsFromServer = async () =>  fetch(GET_DATA_URL )
+const getAdvertsFromServer = () => fetch(GET_DATA_URL)
   .then((response) => {
     if (response.ok) {
       return response.json();
     } else {
-      onLoadError('Данные не пришли с сервера. Обновите страницу');
       mapFiltersDisabled();
     }
   });
@@ -39,5 +36,5 @@ const sendData = (onSuccess, onFail, body) => {
 };
 
 
-export {getAdvertsFromServer, sendData, addvertsFromServer}
+export {getAdvertsFromServer, sendData}
 

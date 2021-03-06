@@ -1,5 +1,7 @@
 /* global L:readonly */
-import {disabledForm, enableForm, setFormHandler} from './form.js';
+import { filteringAdverts } from './filter.js';
+import {disabledForm, enableForm, resetForm} from './form.js';
+import { onLoadError } from './messages.js';
 import { getAdvertsFromServer } from './server.js';
 import {createCard} from './similar-adverts.js';
 //import {filterType} from './filter.js';
@@ -25,7 +27,7 @@ const MapPin = {
 
 const formAddress = document.querySelector('#address');
 const form = document.querySelector('.ad-form');
-const mapFilter = document.querySelector('.map__filters');
+
 // const typeFilter = mapFilter.querySelector('#housing-type');
 const buttonReset = form.querySelector('.ad-form__reset');
 const getAddressDefault = () =>{
@@ -52,20 +54,43 @@ const mainPinMarker = L.marker(
 );
 
 
+const pins = [];
+const createPins = (map, adverts, count) => {
 
 
-const resetForm = () => {
-  form.reset();
-  mapFilter.reset();
-  getAddressDefault();
-  setFormHandler();
-  map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng), 10);
-  mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
-};
+  for (let i = 0; i < count; i++) {
+    const advert = adverts[i];
+    const {location} = advert;
+    const icon = L.icon({
+      iconUrl: MapPin.iconUrl,
+      iconSize: MapPin.iconSize,
+      iconAnchor: MapPin.iconAnchor,
+    });
+
+    const marker = L.marker(
+      {
+        lat:location.lat,
+        lng:location.lng,
+      },
+      {
+        icon,
+      },
+    );
+
+    marker
+      .addTo(map)
+      .bindPopup(createCard(advert));
+
+    pins.push(marker)
+  }
+
+  return pins;
+}
+
+const deletePins = (pins) => pins.forEach(pin => pin.remove())
 
 //функция для создания карты
 const createMap = async () =>{
-
   //форма недоступна, пока не загрузится карта
   disabledForm();
 
@@ -83,6 +108,7 @@ const createMap = async () =>{
       attribution: COPYRIGTH_MAP,
     },
   ).addTo(map);
+
   mainPinMarker.addTo(map);
 
   //запрещаем ручное редактирование формы
@@ -99,48 +125,31 @@ const createMap = async () =>{
   });
 
   //добавляем маркеры и заполняем балун со случайными объявлениями
-  const adverts = await getAdvertsFromServer();
+  try {
+    const adverts = await getAdvertsFromServer();
 
-  if(adverts){
-    const newAdverts = adverts.slice(0, AMOUNT_ADVERT)
-    newAdverts.forEach((advert) => {
-      const {location} = advert;
-      const icon = L.icon({
-        iconUrl: MapPin.iconUrl,
-        iconSize: MapPin.iconSize,
-        iconAnchor: MapPin.iconAnchor,
-      });
+    const pins = createPins(map, adverts, AMOUNT_ADVERT);
 
-      const marker = L.marker(
-        {
-          lat:location.lat,
-          lng:location.lng,
-        },
-        {
-          icon,
-        },
-      );
-
-      marker
-        .addTo(map)
-        .bindPopup(
-          createCard(advert),
-        );
-
-    });
-
-
-
+    filteringAdverts(adverts, pins)
+  } catch (err) {
+    onLoadError('Данные не пришли с сервера. Обновите страницу')
   }
-
-
   buttonReset.addEventListener('click', (evt) => {
     evt.preventDefault();
     resetForm();
-  },
-  )
-
+  })
 }
 
+//для сброса пинов при ресет
+const removePins = () => {
+  pins.forEach((pin) => {
+    pin.remove();
+  })
+}
 
-export {createMap, getAddressDefault, resetForm}
+const reCreateMap = async () =>{
+  removePins();
+  createMap();
+  enableForm();
+}
+export {createMap, getAddressDefault, map, deletePins, createPins, mainPinMarker, AMOUNT_ADVERT, centerCoordinates, reCreateMap}
