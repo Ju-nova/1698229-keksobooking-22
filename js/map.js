@@ -1,19 +1,12 @@
 /* global L:readonly */
+
 import { filteringAdverts } from './filter.js';
 import {disabledForm, enableForm, resetForm} from './form.js';
 import { onLoadError } from './messages.js';
 import { getAdvertsFromServer } from './server.js';
 import {createCard} from './similar-adverts.js';
-//import {filterType} from './filter.js';
+import {AMOUNT_ADVERT, centerCoordinates,STYLE_MAP, COPYRIGTH_MAP} from './data.js';
 
-const AMOUNT_ADVERT = 10;
-const STYLE_MAP = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const COPYRIGTH_MAP = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-//координаты центра карты
-const centerCoordinates = {
-  lat: 35.68955,
-  lng: 139.69222,
-}
 const CenterMapPin = {
   iconUrl: 'img/main-pin.svg',
   iconSize: [50, 82],
@@ -28,7 +21,6 @@ const MapPin = {
 const formAddress = document.querySelector('#address');
 const form = document.querySelector('.ad-form');
 
-// const typeFilter = mapFilter.querySelector('#housing-type');
 const buttonReset = form.querySelector('.ad-form__reset');
 const getAddressDefault = () =>{
   formAddress.value = `${centerCoordinates.lat} , ${centerCoordinates.lng}`;
@@ -53,10 +45,8 @@ const mainPinMarker = L.marker(
   },
 );
 
-
 const pins = [];
 const createPins = (map, adverts, count) => {
-
 
   for (let i = 0; i < count; i++) {
     const advert = adverts[i];
@@ -124,13 +114,20 @@ const createMap = async () =>{
 
   });
 
+  // setCoatClick(_.debounce(
+  //   () => renderSimilarList(wizards),
+  //   RERENDER_DELAY,
+  // ));
+
   //добавляем маркеры и заполняем балун со случайными объявлениями
   try {
     const adverts = await getAdvertsFromServer();
 
     const pins = createPins(map, adverts, AMOUNT_ADVERT);
+    // _.debounce(filteringAdverts(pins, adverts), 1000)
+    filteringAdverts(pins, adverts);
 
-    filteringAdverts(adverts, pins)
+
   } catch (err) {
     onLoadError('Данные не пришли с сервера. Обновите страницу')
   }

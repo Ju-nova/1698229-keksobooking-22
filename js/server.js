@@ -1,7 +1,5 @@
 import {mapFiltersDisabled, resetForm} from './form.js';
-
-const GET_DATA_URL = 'https://22.javascript.pages.academy/keksobooking/data';
-const SEND_DATA_URL = 'https://22.javascript.pages.academy/keksobooking';
+import {GET_DATA_URL, SEND_DATA_URL} from './data.js';
 
 //получаем данные с сервера для карты
 const getAdvertsFromServer = () => fetch(GET_DATA_URL)
