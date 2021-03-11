@@ -44,5 +44,9 @@ const isEscEvent = (evt) => {
   return evt.key === 'Escape' || evt.key === 'Esc';
 };
 
+const resetStyleAndInnerElement = (element, standartElement) => {
+  element.innerHTML = standartElement.innerHTML;
+  element.removeAttribute('style');
+}
 
-export {getRandomNumber, getArrayRandElement, getRandomArray, declOfNum, isEnterEvent, isEscEvent };
+export {getRandomNumber, getArrayRandElement, getRandomArray, declOfNum, isEnterEvent, isEscEvent, resetStyleAndInnerElement };
