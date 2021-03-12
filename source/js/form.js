@@ -146,8 +146,21 @@ const synchronizeGuestsRooms = (evt) => {
   })
 }
 
+const selectedType =  selectType.querySelector('option:checked').value;
+
+//при загрузке страницы минимальная цена и правильный плэйсхолдер, который соответствует выбранному элементу по умолчанию
+const defineSelected = () =>{
+  for (let i = 0; i < types.length; i++) {
+    if ( selectedType === types[i]) {
+      inputPrice.placeholder = prices[i];
+      inputPrice.min = prices[i];
+    }
+  }
+}
+
 // основная функция синхронизации в форме
 const setFormHandler = () => {
+  defineSelected();
   selectTimeIn.addEventListener('change', synchronizeTimeIn);
   selectTimeOut.addEventListener('change', synchronizeTimeOut);
   selectType.addEventListener('change', syncronizeTypePrice);
@@ -170,13 +183,15 @@ const validateInputTitle = () => {
   inputTitle.reportValidity();
 }
 
+
+
 //валидация цены
 const validateInputPrice = () => {
   const validity = inputPrice.validity;
   if (validity.rangeOverflow) {
-    inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`)
+    inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`);
   } else if (validity.rangeUnderflow) {
-    inputPrice.setCustomValidity (`Минимум ${inputPrice.min} , меньше нельзя`)
+    inputPrice.setCustomValidity (`Минимум ${inputPrice.min} , меньше нельзя`);
   } else {
     inputPrice.setCustomValidity('')
   }
@@ -214,5 +229,5 @@ const resetForm = () => {
   mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
 };
 
-export {setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled, resetForm};
+export { setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled, resetForm};
 
