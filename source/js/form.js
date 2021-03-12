@@ -3,7 +3,6 @@ import {sendData} from './server.js';
 import {map, getAddressDefault, mainPinMarker, centerCoordinates, reCreateMap} from './map.js';
 import { resetPreviewImages} from './images-form.js';
 
-// массив с временем заселения.отъезда
 const checkHours = [
   '12:00',
   '13:00',
@@ -44,12 +43,11 @@ const mapFiltersDisabled = () =>{
 
 const inputFieldset = form.querySelectorAll('fieldset');
 
-//делаем форму недоступной
 const disabledForm = () => {
   form.classList.add('ad-form--disabled');
   mapFiltersDisabled();
   disableFormItem(inputFieldset);
-}
+};
 
 const  enableFormItem = (item) =>{
   for (let i = 0; i < item.length; i++) {
@@ -57,18 +55,20 @@ const  enableFormItem = (item) =>{
     disableItem.disabled = false;
   }
 };
+
 const mapFiltersEnabled = () =>{
   mapFilters.classList.remove('ad-form--disabled');
   mapFilters.disabled = false;
   enableFormItem(mapFiltersSelect);
   enableFormItem(mapFiltersFieldset);
-}
+};
+
 const enableForm = () => {
   form.classList.remove('ad-form--disabled');
   mapFiltersEnabled();
   enableFormItem(inputFieldset);
 }
-//связываем цену с типом жилища
+
 const typePrice = {
   'bungalow': 0,
   'flat': 1000,
@@ -76,13 +76,12 @@ const typePrice = {
   'palace': 10000,
 };
 
-//извлекаем оттуда массивы отдельно со значениями и ключами
 const types = Object.keys(typePrice);
 const prices = Object.values(typePrice);
 
 const inputPrice = form.querySelector('#price');
 const selectType = form.querySelector('#type');
-// меняем минимальную цену и плэйсхолдер в зависимости от выбранного жилища
+
 const  syncronizeTypePrice = () =>{
   for (let i = 0; i < types.length; i++) {
     if (selectType.value === types[i]) {
@@ -94,7 +93,7 @@ const  syncronizeTypePrice = () =>{
 
 const selectTimeIn = form.querySelector('#timein');
 const selectTimeOut = form.querySelector('#timeout');
-//синхронизируем время заезда-отъезда
+
 const synchronizeTimeIn = () => {
   for (let i = 0; i < checkHours.length; i++) {
     if (selectTimeIn.value === checkHours[i]) {
@@ -116,7 +115,6 @@ const valueOptions = selectRoomNumber.value;
 const selectGuests = form.querySelector('#capacity');
 const guestOptions = selectGuests.querySelectorAll('option');
 
-
 const defaultSelectRoomGuest = () => {
   const guests = roomToCapaсity[valueOptions];
   guestOptions.forEach((option) => {
@@ -131,6 +129,7 @@ const defaultSelectRoomGuest = () => {
     })
   })
 }
+
 const synchronizeGuestsRooms = (evt) => {
   const rooms = roomToCapaсity[evt.target.value];
   guestOptions.forEach((option) => {
@@ -148,7 +147,6 @@ const synchronizeGuestsRooms = (evt) => {
 
 const selectedType =  selectType.querySelector('option:checked').value;
 
-//при загрузке страницы минимальная цена и правильный плэйсхолдер, который соответствует выбранному элементу по умолчанию
 const defineSelected = () =>{
   for (let i = 0; i < types.length; i++) {
     if ( selectedType === types[i]) {
@@ -158,7 +156,6 @@ const defineSelected = () =>{
   }
 }
 
-// основная функция синхронизации в форме
 const setFormHandler = () => {
   defineSelected();
   selectTimeIn.addEventListener('change', synchronizeTimeIn);
@@ -169,7 +166,7 @@ const setFormHandler = () => {
 }
 
 const inputTitle = document.querySelector('#title');
-//валидация заголовка
+
 const validateInputTitle = () => {
   const valueLength = inputTitle.value.length;
 
@@ -183,9 +180,6 @@ const validateInputTitle = () => {
   inputTitle.reportValidity();
 }
 
-
-
-//валидация цены
 const validateInputPrice = () => {
   const validity = inputPrice.validity;
   if (validity.rangeOverflow) {
@@ -198,13 +192,11 @@ const validateInputPrice = () => {
   inputPrice.reportValidity();
 }
 
-//общая валидация формы
 const validateForm = () => {
   inputTitle.addEventListener('input', validateInputTitle );
   inputPrice.addEventListener('input', validateInputPrice );
 }
 
-//отправка формы
 const setFormSubmit = (success, fail) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();

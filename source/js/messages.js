@@ -1,7 +1,5 @@
 import {isEnterEvent, isEscEvent} from './util.js';
 
-
-//сообщение для ошибочной загрузки карты(данные с сервера не получены)
 const onLoadError = (errorMessage) => {
   const message = document.createElement('div');
   const map = document.querySelector('.map__canvas')
@@ -22,7 +20,6 @@ const onLoadError = (errorMessage) => {
   map.appendChild(message);
 }
 
-//успех для формы
 const main = document.querySelector('main');
 const successTemplate = document.querySelector('#success').content.querySelector('.success')
 
@@ -61,7 +58,6 @@ const onSuccess = () =>{
 
 }
 
-//ошибка для формы
 const errorTemplate = document.querySelector('#error').content.querySelector('.error')
 
 const onFail = () =>{

@@ -1,15 +1,15 @@
 import {declOfNum} from './util.js';
 
-const similarCardTemplate = document.querySelector('#card')// сам шаблон
+const similarCardTemplate = document.querySelector('#card')
   .content
-  .querySelector('.popup'); //элемент внутри шаблона, в котором заменяем контент
+  .querySelector('.popup');
 
-//наполняем карточку-попап из значений объекта
+
 const createCard = (card) => {
   const similarCard = similarCardTemplate.cloneNode(true);
 
   const cardAvatar = similarCard.querySelector('.popup__avatar');
-  (card.author.avatar) ? cardAvatar.src = card.author.avatar : cardAvatar.remove();//тернарный оператор(если элемент undefined, то удаляем его), если нет, то заполняем контентом или другое
+  (card.author.avatar) ? cardAvatar.src = card.author.avatar : cardAvatar.remove();
 
   const cardTitle = similarCard.querySelector('.popup__title');
   (card.offer.title) ? cardTitle.textContent = card.offer.title : cardTitle.remove();
@@ -34,7 +34,6 @@ const createCard = (card) => {
   const cardDescription = similarCard.querySelector('.popup__description');
   (card.offer.description) ? cardDescription.textContent = card.offer.description : cardDescription.remove();
 
-  // создаем элементы списка в соотсветствии с массивом фич
   const featureList = similarCard.querySelector('.popup__features');
   if(card.offer.features){
     featureList.innerHTML = '';
@@ -46,7 +45,6 @@ const createCard = (card) => {
     }
   } else featureList.remove();
 
-  // создаем изображения  в соответствии с массивом путей картинок
   const photoList = similarCard.querySelector('.popup__photos');
   if(card.offer.photos){
     photoList.innerHTML = '';

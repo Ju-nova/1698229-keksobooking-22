@@ -1,5 +1,3 @@
-// Функция, возвращающая случайное целое число из переданного диапазона включительно
-// и возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
 const getRandomNumber = (min, max, numberSymbols ) => {
   const preResult = (Math.random() * (max - min) + min);
   if (numberSymbols){
@@ -9,13 +7,11 @@ const getRandomNumber = (min, max, numberSymbols ) => {
   return Math.round(preResult);
 };
 
-// получаем случайный элемент из массива
 const getArrayRandElement = (array) => {
   const rand = Math.floor(Math.random() * array.length);
   return array[rand];
 }
 
-// создаем массив случайной длины с неповторяющимися значениями
 const getRandomArray = (array) => {
   const newArray = array.slice();
 
@@ -30,11 +26,9 @@ const getRandomArray = (array) => {
   return newArray.slice(0, length);
 };
 
-//функция для окончаний существительных
 const declOfNum = (number, words) => {
   return words[(number % 100 > 4 && number % 100 < 20) ? 2 : [2, 0, 1, 1, 1, 2][(number % 10 < 5) ? number % 10 : 5]];
 }
-
 
 const isEnterEvent = (evt) => {
   return evt.key === 'Enter';
