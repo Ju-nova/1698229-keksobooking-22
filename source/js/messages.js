@@ -32,14 +32,25 @@ const onSuccess = () =>{
   successFormMessage.style.zIndex = '1000';
 
   main.appendChild(successFormMessage);
-  successFormMessage.addEventListener('click', (evt) => {
-    evt.target.remove();
+  successFormMessage.addEventListener('click', () => {
+    successFormMessage.remove();
+  });
+
+  successFormMessage.removeEventListener('click', () => {
+    successFormMessage.remove();
   });
 
   document.addEventListener('keydown', (evt) => {
-
     if (isEscEvent(evt)) {
-      evt.target.remove()
+      evt.preventDefault();
+      successFormMessage.remove()
+    }
+  });
+
+  document.removeEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      successFormMessage.remove()
     }
   });
 
@@ -58,9 +69,14 @@ const onFail = () =>{
   errorFormMessage.style.zIndex = '1000';
   main.appendChild(errorFormMessage);
   const errorButton = errorFormMessage.querySelector('.error__button');
-  errorButton.addEventListener('click', () => errorFormMessage.remove())
+  errorButton.addEventListener('click', () => errorFormMessage.remove());
+  errorButton.removeEventListener('click', () => errorFormMessage.remove())
   errorButton.addEventListener('keydown', (evt) => {
-
+    if (isEnterEvent(evt)) {
+      errorFormMessage.remove()
+    }
+  })
+  errorButton.removeEventListener('keydown', (evt) => {
     if (isEnterEvent(evt)) {
       errorFormMessage.remove()
     }
