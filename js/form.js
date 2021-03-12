@@ -1,6 +1,7 @@
 /* global L:readonly */
 import {sendData} from './server.js';
 import {map, getAddressDefault, mainPinMarker, centerCoordinates, reCreateMap} from './map.js';
+import { resetPreviewImages} from './images-form.js';
 
 // массив с временем заселения.отъезда
 const checkHours = [
@@ -208,6 +209,7 @@ const resetForm = () => {
   mapFilter.reset();
   getAddressDefault();
   setFormHandler();
+  resetPreviewImages()
   map.setView(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng), 10);
   mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
 };
