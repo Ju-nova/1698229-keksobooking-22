@@ -29,31 +29,24 @@ const onSuccess = () =>{
   successFormMessage.style.zIndex = '1000';
 
   main.appendChild(successFormMessage);
-  successFormMessage.addEventListener('click', () => {
+
+  const closeSuccessFormMessage = () => {
     successFormMessage.remove();
-  });
+    document.removeEventListener('click', closeSuccessFormMessage);
+    document.removeEventListener('keydown', closeEscKeyDownSuccessFormMessage);
+  };
 
-  successFormMessage.removeEventListener('click', () => {
-    successFormMessage.remove();
-  });
-
-  document.addEventListener('keydown', (evt) => {
+  const closeEscKeyDownSuccessFormMessage = (evt) => {
     if (isEscEvent(evt)) {
-      evt.preventDefault();
-      successFormMessage.remove()
+      closeSuccessFormMessage();
     }
-  });
+  };
 
-  document.removeEventListener('keydown', (evt) => {
-    if (isEscEvent(evt)) {
-      evt.preventDefault();
-      successFormMessage.remove()
-    }
-  });
-
+  document.addEventListener('click', closeSuccessFormMessage);
+  document.addEventListener('keydown', closeEscKeyDownSuccessFormMessage);
 
   setTimeout(() => {
-    successFormMessage.remove();
+    closeSuccessFormMessage();
   }, 5000);
 
 }
@@ -65,18 +58,31 @@ const onFail = () =>{
   errorFormMessage.style.zIndex = '1000';
   main.appendChild(errorFormMessage);
   const errorButton = errorFormMessage.querySelector('.error__button');
-  errorButton.addEventListener('click', () => errorFormMessage.remove());
-  errorButton.removeEventListener('click', () => errorFormMessage.remove())
-  errorButton.addEventListener('keydown', (evt) => {
+
+  const closeErrorFormMessage = () => {
+    errorFormMessage.remove();
+    errorButton.removeEventListener('click', closeErrorFormMessage);
+    document.removeEventListener('click', closeErrorFormMessage);
+    errorButton.removeEventListener('keydown', closeEnterKeyDownErrorFormMessage);
+    document.removeEventListener('keydown', closeEscKeyDownErrorFormMessage);
+  };
+
+  const closeEnterKeyDownErrorFormMessage = (evt) => {
     if (isEnterEvent(evt)) {
-      errorFormMessage.remove()
+      closeErrorFormMessage();
     }
-  })
-  errorButton.removeEventListener('keydown', (evt) => {
-    if (isEnterEvent(evt)) {
-      errorFormMessage.remove()
+  };
+
+  const closeEscKeyDownErrorFormMessage = (evt) => {
+    if (isEscEvent(evt)) {
+      closeErrorFormMessage();
     }
-  })
+  };
+
+  errorButton.addEventListener('click', closeErrorFormMessage);
+  errorButton.addEventListener('keydown', closeEnterKeyDownErrorFormMessage)
+  document.addEventListener('click', closeErrorFormMessage);
+  document.addEventListener('keydown', closeEscKeyDownErrorFormMessage);
 }
 
 export { onLoadError, onSuccess, onFail }

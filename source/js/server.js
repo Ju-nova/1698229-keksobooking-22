@@ -1,5 +1,5 @@
 import {mapFiltersDisabled, resetForm} from './form.js';
-import {GET_DATA_URL, SEND_DATA_URL} from './data.js';
+import {GET_DATA_URL, SEND_DATA_URL} from './const.js';
 
 const getAdvertsFromServer = () => fetch(GET_DATA_URL)
   .then((response) => {

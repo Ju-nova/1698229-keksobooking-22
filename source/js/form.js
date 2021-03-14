@@ -32,7 +32,7 @@ const  disableFormItem = (item) =>{
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersSelect =  mapFilters.querySelectorAll('.map__filter');
-const mapFiltersFieldset =  mapFilters.querySelector('.map__features');
+const mapFiltersFieldset =  mapFilters.querySelectorAll('.map__features input');
 
 const mapFiltersDisabled = () =>{
   mapFilters.classList.add('ad-form--disabled');

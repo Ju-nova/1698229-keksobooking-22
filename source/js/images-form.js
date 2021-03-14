@@ -14,17 +14,14 @@ const resetPreviewImages = () => {
   resetStyleAndInnerElement(photoPreview, newPhotoPreview);
 }
 
-const getMatches = (file) => {
-  return FILE_TYPES.some((it) => {
-    return file.endsWith(it);
-  })
-}
+const getMatches = (file) => FILE_TYPES.some((it) => file.endsWith(it));
 
 const getPreviewFileImage = (input, preview) => {
   const file = input.files[0];
   const fileName = file.name.toLowerCase();
 
   if (getMatches(fileName)) {
+    input.setCustomValidity('');
     const reader = new FileReader();
 
     reader.addEventListener('load', () => {
@@ -45,7 +42,13 @@ const getPreviewFileImage = (input, preview) => {
     });
 
     reader.readAsDataURL(file);
+
+  } else {
+    input.setCustomValidity('Неверный формат');
+    preview.innerHTML = '';
   }
+
+  input.reportValidity();
 }
 
 avatarInput.addEventListener('change', () => {

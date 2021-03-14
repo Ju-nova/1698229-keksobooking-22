@@ -5,7 +5,7 @@ import {disabledForm, enableForm, resetForm} from './form.js';
 import { onLoadError } from './messages.js';
 import { getAdvertsFromServer } from './server.js';
 import {createCard} from './similar-adverts.js';
-import {AMOUNT_ADVERT, centerCoordinates,STYLE_MAP, COPYRIGTH_MAP} from './data.js';
+import {AMOUNT_ADVERT, centerCoordinates,STYLE_MAP, COPYRIGTH_MAP} from './const.js';
 
 const CenterMapPin = {
   iconUrl: 'img/main-pin.svg',
@@ -79,7 +79,6 @@ const createPins = (map, adverts, count) => {
 
 const deletePins = (pins) => pins.forEach(pin => pin.remove())
 
-
 const createMap = async () =>{
 
   disabledForm();
@@ -136,4 +135,5 @@ const reCreateMap = async () =>{
   createMap();
   enableForm();
 }
+
 export {createMap, getAddressDefault, map, deletePins, createPins, mainPinMarker, AMOUNT_ADVERT, centerCoordinates, reCreateMap}

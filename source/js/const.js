@@ -9,5 +9,4 @@ const centerCoordinates = {
   lng: 139.69222,
 }
 
-
 export {AMOUNT_ADVERT,DELAY_TIME, GET_DATA_URL, SEND_DATA_URL, centerCoordinates, STYLE_MAP, COPYRIGTH_MAP}
