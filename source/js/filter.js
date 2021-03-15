@@ -1,6 +1,6 @@
 /* global _:readonly */
 import {deletePins, createPins, map} from './map.js'
-import {AMOUNT_ADVERT, DELAY_TIME} from './const.js';
+import {AMOUNT_ADVERT, DELAY_TIME, ANY} from './const.js';
 
 const mapFilter = document.querySelector('.map__filters');
 const housingType = mapFilter.querySelector('#housing-type');
@@ -23,7 +23,7 @@ const filterForPrice = {
 }
 
 const typeFilter  = (advert, filter) => {
-  if (filter === 'any' || advert.offer.type === filter) {
+  if (filter === ANY || advert.offer.type === filter) {
     return true;
   }
   return false;
@@ -33,21 +33,21 @@ const priceFilter = (advert, filter) => {
   if (advert.offer.price >= filterForPrice[filter][0] && advert.offer.price < filterForPrice[filter][1]) {
     return true;
   }
-  if (filter === 'any') {
+  if (filter === ANY) {
     return true;
   }
   return false;
 }
 
 const roomFilter = (advert, filter) => {
-  if (filter === 'any' || filter === String(advert.offer.rooms)) {
+  if (filter === ANY || filter === String(advert.offer.rooms)) {
     return true;
   }
   return false;
 }
 
 const guestFilter = (advert, filter) => {
-  if (filter === 'any' || filter === String(advert.offer.guests)) {
+  if (filter === ANY || filter === String(advert.offer.guests)) {
     return true;
   }
   return false;
@@ -63,10 +63,10 @@ const featureFilter = (advert, filters) => {
 }
 
 const filteringAdverts = (pins, adverts) => {
-  let type = 'any';
-  let price = 'any';
-  let rooms = 'any';
-  let guest = 'any';
+  let type = ANY;
+  let price = ANY;
+  let rooms = ANY;
+  let guest = ANY;
   let featuresList = [];
   let filteredAdd = adverts;
 

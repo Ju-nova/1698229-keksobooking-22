@@ -9,6 +9,13 @@ const checkHours = [
   '14:00',
 ];
 
+const typePrice = {
+  'bungalow': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000,
+};
+
 const AdvertTitleLength = {
   MIN : 30,
   MAX : 100,
@@ -68,13 +75,6 @@ const enableForm = () => {
   mapFiltersEnabled();
   enableFormItem(inputFieldset);
 }
-
-const typePrice = {
-  'bungalow': 0,
-  'flat': 1000,
-  'house': 5000,
-  'palace': 10000,
-};
 
 const types = Object.keys(typePrice);
 const prices = Object.values(typePrice);
