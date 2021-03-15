@@ -43,9 +43,7 @@ const createCard = (card) => {
       feature.classList.add('popup__feature', featureClass);
       featureList.appendChild(feature);
     }
-  } else {
-    featureList.remove();
-  }
+  } else featureList.remove();
 
   const photoList = similarCard.querySelector('.popup__photos');
   if(card.offer.photos){
@@ -55,9 +53,7 @@ const createCard = (card) => {
       photo.src = card.offer.photos[i];
       photoList.appendChild(photo);
     }
-  } else {
-    featureList.remove();
-  }
+  } else photoList.remove();
 
   return similarCard;
 };
