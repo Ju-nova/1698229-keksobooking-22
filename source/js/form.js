@@ -3,12 +3,18 @@ import {sendData} from './server.js';
 import {map, getAddressDefault, mainPinMarker, centerCoordinates, reCreateMap} from './map.js';
 import { resetPreviewImages} from './images-form.js';
 
-// массив с временем заселения.отъезда
 const checkHours = [
   '12:00',
   '13:00',
   '14:00',
 ];
+
+const typePrice = {
+  'bungalow': 0,
+  'flat': 1000,
+  'house': 5000,
+  'palace': 10000,
+};
 
 const AdvertTitleLength = {
   MIN : 30,
@@ -33,7 +39,7 @@ const  disableFormItem = (item) =>{
 
 const mapFilters = document.querySelector('.map__filters');
 const mapFiltersSelect =  mapFilters.querySelectorAll('.map__filter');
-const mapFiltersFieldset =  mapFilters.querySelector('.map__features');
+const mapFiltersFieldset =  mapFilters.querySelectorAll('.map__features input');
 
 const mapFiltersDisabled = () =>{
   mapFilters.classList.add('ad-form--disabled');
@@ -44,12 +50,11 @@ const mapFiltersDisabled = () =>{
 
 const inputFieldset = form.querySelectorAll('fieldset');
 
-//делаем форму недоступной
 const disabledForm = () => {
   form.classList.add('ad-form--disabled');
   mapFiltersDisabled();
   disableFormItem(inputFieldset);
-}
+};
 
 const  enableFormItem = (item) =>{
   for (let i = 0; i < item.length; i++) {
@@ -57,33 +62,27 @@ const  enableFormItem = (item) =>{
     disableItem.disabled = false;
   }
 };
+
 const mapFiltersEnabled = () =>{
   mapFilters.classList.remove('ad-form--disabled');
   mapFilters.disabled = false;
   enableFormItem(mapFiltersSelect);
   enableFormItem(mapFiltersFieldset);
-}
+};
+
 const enableForm = () => {
   form.classList.remove('ad-form--disabled');
   mapFiltersEnabled();
   enableFormItem(inputFieldset);
 }
-//связываем цену с типом жилища
-const typePrice = {
-  'bungalow': 0,
-  'flat': 1000,
-  'house': 5000,
-  'palace': 10000,
-};
 
-//извлекаем оттуда массивы отдельно со значениями и ключами
 const types = Object.keys(typePrice);
 const prices = Object.values(typePrice);
 
 const inputPrice = form.querySelector('#price');
 const selectType = form.querySelector('#type');
-// меняем минимальную цену и плэйсхолдер в зависимости от выбранного жилища
-const  syncronizeTypePrice = () =>{
+
+const  onSyncronizeTypePriceChange = () =>{
   for (let i = 0; i < types.length; i++) {
     if (selectType.value === types[i]) {
       inputPrice.placeholder = prices[i];
@@ -94,8 +93,8 @@ const  syncronizeTypePrice = () =>{
 
 const selectTimeIn = form.querySelector('#timein');
 const selectTimeOut = form.querySelector('#timeout');
-//синхронизируем время заезда-отъезда
-const synchronizeTimeIn = () => {
+
+const onSynchronizeTimeInChange = () => {
   for (let i = 0; i < checkHours.length; i++) {
     if (selectTimeIn.value === checkHours[i]) {
       selectTimeOut.value = checkHours[i];
@@ -103,7 +102,7 @@ const synchronizeTimeIn = () => {
   }
 } ;
 
-const synchronizeTimeOut = () => {
+const onSynchronizeTimeOutChange = () => {
   for (let i = 0; i < checkHours.length; i++) {
     if (selectTimeOut.value === checkHours[i]) {
       selectTimeIn.value = checkHours[i];
@@ -115,7 +114,6 @@ const selectRoomNumber = form.querySelector('#room_number');
 const valueOptions = selectRoomNumber.value;
 const selectGuests = form.querySelector('#capacity');
 const guestOptions = selectGuests.querySelectorAll('option');
-
 
 const defaultSelectRoomGuest = () => {
   const guests = roomToCapaсity[valueOptions];
@@ -131,7 +129,8 @@ const defaultSelectRoomGuest = () => {
     })
   })
 }
-const synchronizeGuestsRooms = (evt) => {
+
+const onSynchronizeGuestsRoomsChange = (evt) => {
   const rooms = roomToCapaсity[evt.target.value];
   guestOptions.forEach((option) => {
     option.disabled = true;
@@ -146,18 +145,29 @@ const synchronizeGuestsRooms = (evt) => {
   })
 }
 
-// основная функция синхронизации в форме
+const selectedType =  selectType.querySelector('option:checked').value;
+
+const defineSelected = () =>{
+  for (let i = 0; i < types.length; i++) {
+    if ( selectedType === types[i]) {
+      inputPrice.placeholder = prices[i];
+      inputPrice.min = prices[i];
+    }
+  }
+}
+
 const setFormHandler = () => {
-  selectTimeIn.addEventListener('change', synchronizeTimeIn);
-  selectTimeOut.addEventListener('change', synchronizeTimeOut);
-  selectType.addEventListener('change', syncronizeTypePrice);
+  defineSelected();
+  selectTimeIn.addEventListener('change', onSynchronizeTimeInChange);
+  selectTimeOut.addEventListener('change', onSynchronizeTimeOutChange);
+  selectType.addEventListener('change', onSyncronizeTypePriceChange);
   defaultSelectRoomGuest();
-  selectRoomNumber.addEventListener('change', synchronizeGuestsRooms);
+  selectRoomNumber.addEventListener('change', onSynchronizeGuestsRoomsChange);
 }
 
 const inputTitle = document.querySelector('#title');
-//валидация заголовка
-const validateInputTitle = () => {
+
+const onValidateTitleInput = () => {
   const valueLength = inputTitle.value.length;
 
   if (valueLength < AdvertTitleLength.MIN) {
@@ -170,26 +180,23 @@ const validateInputTitle = () => {
   inputTitle.reportValidity();
 }
 
-//валидация цены
-const validateInputPrice = () => {
+const onValidatePriceInput = () => {
   const validity = inputPrice.validity;
   if (validity.rangeOverflow) {
-    inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`)
+    inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`);
   } else if (validity.rangeUnderflow) {
-    inputPrice.setCustomValidity (`Минимум ${inputPrice.min} , меньше нельзя`)
+    inputPrice.setCustomValidity (`Минимум ${inputPrice.min} , меньше нельзя`);
   } else {
     inputPrice.setCustomValidity('')
   }
   inputPrice.reportValidity();
 }
 
-//общая валидация формы
 const validateForm = () => {
-  inputTitle.addEventListener('input', validateInputTitle );
-  inputPrice.addEventListener('input', validateInputPrice );
+  inputTitle.addEventListener('input', onValidateTitleInput );
+  inputPrice.addEventListener('input', onValidatePriceInput );
 }
 
-//отправка формы
 const setFormSubmit = (success, fail) => {
   form.addEventListener('submit', (evt) => {
     evt.preventDefault();
@@ -214,5 +221,5 @@ const resetForm = () => {
   mainPinMarker.setLatLng(new L.LatLng(centerCoordinates.lat, centerCoordinates.lng))
 };
 
-export {setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled, resetForm};
+export { setFormHandler, disabledForm, enableForm, validateForm, setFormSubmit, mapFiltersDisabled, resetForm};
 
