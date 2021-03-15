@@ -82,7 +82,7 @@ const prices = Object.values(typePrice);
 const inputPrice = form.querySelector('#price');
 const selectType = form.querySelector('#type');
 
-const  syncronizeTypePrice = () =>{
+const  onSyncronizeTypePriceChange = () =>{
   for (let i = 0; i < types.length; i++) {
     if (selectType.value === types[i]) {
       inputPrice.placeholder = prices[i];
@@ -94,7 +94,7 @@ const  syncronizeTypePrice = () =>{
 const selectTimeIn = form.querySelector('#timein');
 const selectTimeOut = form.querySelector('#timeout');
 
-const synchronizeTimeIn = () => {
+const onSynchronizeTimeInChange = () => {
   for (let i = 0; i < checkHours.length; i++) {
     if (selectTimeIn.value === checkHours[i]) {
       selectTimeOut.value = checkHours[i];
@@ -102,7 +102,7 @@ const synchronizeTimeIn = () => {
   }
 } ;
 
-const synchronizeTimeOut = () => {
+const onSynchronizeTimeOutChange = () => {
   for (let i = 0; i < checkHours.length; i++) {
     if (selectTimeOut.value === checkHours[i]) {
       selectTimeIn.value = checkHours[i];
@@ -130,7 +130,7 @@ const defaultSelectRoomGuest = () => {
   })
 }
 
-const synchronizeGuestsRooms = (evt) => {
+const onSynchronizeGuestsRoomsChange = (evt) => {
   const rooms = roomToCapaсity[evt.target.value];
   guestOptions.forEach((option) => {
     option.disabled = true;
@@ -158,16 +158,16 @@ const defineSelected = () =>{
 
 const setFormHandler = () => {
   defineSelected();
-  selectTimeIn.addEventListener('change', synchronizeTimeIn);
-  selectTimeOut.addEventListener('change', synchronizeTimeOut);
-  selectType.addEventListener('change', syncronizeTypePrice);
+  selectTimeIn.addEventListener('change', onSynchronizeTimeInChange);
+  selectTimeOut.addEventListener('change', onSynchronizeTimeOutChange);
+  selectType.addEventListener('change', onSyncronizeTypePriceChange);
   defaultSelectRoomGuest();
-  selectRoomNumber.addEventListener('change', synchronizeGuestsRooms);
+  selectRoomNumber.addEventListener('change', onSynchronizeGuestsRoomsChange);
 }
 
 const inputTitle = document.querySelector('#title');
 
-const validateInputTitle = () => {
+const onValidateTitleInput = () => {
   const valueLength = inputTitle.value.length;
 
   if (valueLength < AdvertTitleLength.MIN) {
@@ -180,7 +180,7 @@ const validateInputTitle = () => {
   inputTitle.reportValidity();
 }
 
-const validateInputPrice = () => {
+const onValidatePriceInput = () => {
   const validity = inputPrice.validity;
   if (validity.rangeOverflow) {
     inputPrice.setCustomValidity (`Максимум ${inputPrice.max} , больше нельзя`);
@@ -193,8 +193,8 @@ const validateInputPrice = () => {
 }
 
 const validateForm = () => {
-  inputTitle.addEventListener('input', validateInputTitle );
-  inputPrice.addEventListener('input', validateInputPrice );
+  inputTitle.addEventListener('input', onValidateTitleInput );
+  inputPrice.addEventListener('input', onValidatePriceInput );
 }
 
 const setFormSubmit = (success, fail) => {
