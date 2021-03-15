@@ -1,7 +1,7 @@
 /* global L:readonly */
 import {sendData} from './server.js';
-import {map, getAddressDefault, mainPinMarker, centerCoordinates, reCreateMap} from './map.js';
-import { resetPreviewImages} from './images-form.js';
+import {map, getAddressDefault, mainPinMarker, centerCoordinates, recreateMap} from './map.js';
+import {resetPreviewImages} from './images-form.js';
 
 const checkHours = [
   '12:00',
@@ -212,7 +212,7 @@ const setFormSubmit = (success, fail) => {
 const mapFilter = document.querySelector('.map__filters');
 const resetForm = () => {
   form.reset();
-  reCreateMap();
+  recreateMap();
   mapFilter.reset();
   getAddressDefault();
   setFormHandler();

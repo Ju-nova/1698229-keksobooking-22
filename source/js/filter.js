@@ -10,9 +10,9 @@ const housingGuests = mapFilter.querySelector('#housing-guests');
 const housingFeatures = mapFilter.querySelector('#housing-features');
 
 const changeMapFiltersForm = (cb) => {
-  mapFilter.addEventListener('change', () => {
+  mapFilter.addEventListener('change', _.debounce(() => {
     cb();
-  });
+  }, DELAY_TIME));
 }
 
 const filterForPrice = {
@@ -22,38 +22,15 @@ const filterForPrice = {
   any: [0, 1000000],
 }
 
-const typeFilter  = (advert, filter) => {
-  if (filter === ANY || advert.offer.type === filter) {
-    return true;
-  }
-  return false;
-}
+const createTypeFilter  = (advert, filter) => (filter === ANY || advert.offer.type === filter )
 
-const priceFilter = (advert, filter) => {
-  if (advert.offer.price >= filterForPrice[filter][0] && advert.offer.price < filterForPrice[filter][1]) {
-    return true;
-  }
-  if (filter === ANY) {
-    return true;
-  }
-  return false;
-}
+const createPriceFilter = (advert, filter) =>  (advert.offer.price >= filterForPrice[filter][0] && advert.offer.price < filterForPrice[filter][1]) || (filter === ANY);
 
-const roomFilter = (advert, filter) => {
-  if (filter === ANY || filter === String(advert.offer.rooms)) {
-    return true;
-  }
-  return false;
-}
+const createRoomFilter = (advert, filter) =>  (filter === ANY || filter === String(advert.offer.rooms));
 
-const guestFilter = (advert, filter) => {
-  if (filter === ANY || filter === String(advert.offer.guests)) {
-    return true;
-  }
-  return false;
-}
+const createGuestFilter = (advert, filter) => (filter === ANY || filter === String(advert.offer.guests));
 
-const featureFilter = (advert, filters) => {
+const createFeatureFilter = (advert, filters) => {
   for (const filter of filters) {
     if (!advert.offer.features.includes(filter)) {
       return false
@@ -62,7 +39,7 @@ const featureFilter = (advert, filters) => {
   return true;
 }
 
-const filteringAdverts = (pins, adverts) => {
+const getFilterAdverts = (pins, adverts) => {
   let type = ANY;
   let price = ANY;
   let rooms = ANY;
@@ -77,20 +54,16 @@ const filteringAdverts = (pins, adverts) => {
     pins =  createPins(map, filteredAdd, newAmountAdvert)
   }
 
-  const debounceUpdatePins = changeMapFiltersForm(_.debounce(
-    () => updatePins(), DELAY_TIME,
-  ));
-
-  const filteringOffers = () => filteredAdd = adverts
-    .filter((advert) => typeFilter(advert, type))
-    .filter((advert) => priceFilter(advert, price))
-    .filter((advert) => roomFilter(advert, rooms))
-    .filter((advert) => guestFilter(advert, guest))
-    .filter((advert) => featureFilter(advert, featuresList));
+  const getFilterOffers = () => filteredAdd = adverts
+    .filter((advert) => createTypeFilter(advert, type))
+    .filter((advert) => createPriceFilter(advert, price))
+    .filter((advert) => createRoomFilter(advert, rooms))
+    .filter((advert) => createGuestFilter(advert, guest))
+    .filter((advert) => createFeatureFilter(advert, featuresList));
 
   const displayFilter = () => {
-    filteringOffers();
-    debounceUpdatePins;
+    getFilterOffers();
+    updatePins();
   }
 
   housingType.addEventListener('change', (evt) => {
@@ -123,6 +96,6 @@ const filteringAdverts = (pins, adverts) => {
 }
 
 
-export {filteringAdverts, changeMapFiltersForm };
+export {getFilterAdverts, changeMapFiltersForm };
 
 

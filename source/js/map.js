@@ -1,6 +1,6 @@
 /* global L:readonly */
 
-import { filteringAdverts } from './filter.js';
+import { getFilterAdverts } from './filter.js';
 import {disabledForm, enableForm, resetForm} from './form.js';
 import { onLoadError } from './messages.js';
 import { getAdvertsFromServer } from './server.js';
@@ -112,7 +112,7 @@ const createMap = async () =>{
   try {
     const adverts = await getAdvertsFromServer();
     const pins = createPins(map, adverts, AMOUNT_ADVERT);
-    filteringAdverts(pins, adverts);
+    getFilterAdverts(pins, adverts);
 
 
   } catch (err) {
@@ -130,10 +130,10 @@ const removePins = () => {
   })
 }
 
-const reCreateMap = async () =>{
+const recreateMap = async () =>{
   removePins();
   createMap();
   enableForm();
 }
 
-export {createMap, getAddressDefault, map, deletePins, createPins, mainPinMarker, AMOUNT_ADVERT, centerCoordinates, reCreateMap}
+export {createMap, getAddressDefault, map, deletePins, createPins, mainPinMarker, AMOUNT_ADVERT, centerCoordinates, recreateMap}

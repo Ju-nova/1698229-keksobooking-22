@@ -1,4 +1,4 @@
-import {declOfNum} from './util.js';
+import {createCountFormatter} from './util.js';
 
 const similarCardTemplate = document.querySelector('#card')
   .content
@@ -24,8 +24,8 @@ const createCard = (card) => {
   (card.offer.type) ? cardType.textContent = card.offer.type : cardType.remove();
 
   const cardRoomsGuests = similarCard.querySelector('.popup__text--capacity');
-  (card.offer.rooms && card.offer.guests) ? cardRoomsGuests.textContent = `${card.offer.rooms} ${declOfNum(card.offer.rooms, ['комната', 'комнаты', 'комнаты'])}
-   для ${card.offer.guests} ${declOfNum(card.offer.guests, ['гостя', 'гостей', 'гостей'])}` : cardRoomsGuests.remove();
+  (card.offer.rooms && card.offer.guests) ? cardRoomsGuests.textContent = `${card.offer.rooms} ${createCountFormatter(card.offer.rooms, ['комната', 'комнаты', 'комнаты'])}
+   для ${card.offer.guests} ${createCountFormatter(card.offer.guests, ['гостя', 'гостей', 'гостей'])}` : cardRoomsGuests.remove();
 
   const cardTime = similarCard.querySelector('.popup__text--time');
   (card.offer.checkin && card.offer.checkout) ? cardTime.textContent = `Заезд после  ${card.offer.checkin},
